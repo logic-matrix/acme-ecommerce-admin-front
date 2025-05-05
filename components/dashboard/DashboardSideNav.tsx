@@ -9,7 +9,6 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
-  Home,
   Zap,
   Icon,
   ChevronDown,
@@ -44,7 +43,7 @@ const NavItem = ({
     <Link
       href="#"
       onClick={onClick}
-      className={`flex items-center p-2 rounded-lg transition-colors ${
+      className={`flex items-center p-2.5 rounded-lg transition-colors ${
         active
           ? "bg-blue-50 text-blue-600"
           : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
