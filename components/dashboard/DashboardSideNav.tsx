@@ -1,0 +1,202 @@
+"use client";
+
+import {
+  LayoutDashboard,
+  ShoppingCart,
+  Users,
+  Package,
+  Settings,
+  LogOut,
+  ChevronLeft,
+  ChevronRight,
+  Home,
+  Zap,
+  Icon,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
+import Link from "next/link";
+import { ReactElement, ReactNode, cloneElement, useState } from "react";
+
+type LucideIconProps = React.ComponentProps<typeof Icon>;
+
+interface NavItemProps {
+  icon: ReactElement<LucideIconProps>;
+  children: ReactNode;
+  collapsed: boolean;
+  active?: boolean;
+  hasSubmenu?: boolean;
+  isSubmenuOpen?: boolean;
+  onClick?: () => void;
+}
+
+const NavItem = ({
+  icon,
+  children,
+  collapsed,
+  active = false,
+  hasSubmenu = false,
+  isSubmenuOpen = false,
+  onClick,
+}: NavItemProps) => {
+  return (
+    <Link
+      href="#"
+      onClick={onClick}
+      className={`flex items-center p-2 rounded-lg transition-colors ${
+        active
+          ? "bg-blue-50 text-blue-600"
+          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+      }`}
+    >
+      <span className="flex-shrink-0">
+        {cloneElement(icon, {
+          size: 20,
+          className: active ? "text-blue-500" : "text-gray-500",
+        })}
+      </span>
+      {!collapsed && (
+        <span className="ml-3 flex-1 text-sm font-semibold flex justify-between items-center">
+          {children}
+          {hasSubmenu && (
+            <span>
+              {isSubmenuOpen ? (
+                <ChevronUp size={16} className="text-gray-500" />
+              ) : (
+                <ChevronDown size={16} className="text-gray-500" />
+              )}
+            </span>
+          )}
+        </span>
+      )}
+    </Link>
+  );
+};
+
+interface SubMenuItemProps {
+  children: ReactNode;
+  collapsed: boolean;
+}
+
+const SubMenuItem = ({ children, collapsed }: SubMenuItemProps) => {
+  return (
+    <Link
+      href="#"
+      className={`flex items-center text-sm p-2 pl-11 rounded-lg transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 ${
+        collapsed ? "hidden" : "block"
+      }`}
+    >
+      {children}
+    </Link>
+  );
+};
+
+interface DashboardSideNavProps {
+  collapsed: boolean;
+  setCollapsed: (collapsed: boolean) => void;
+}
+
+const DashboardSideNav = ({
+  collapsed,
+  setCollapsed,
+}: DashboardSideNavProps) => {
+  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+
+  const toggleSubmenu = (menu: string) => {
+    setOpenSubmenu(openSubmenu === menu ? null : menu);
+  };
+
+  return (
+    <div
+      className={`bg-white border-r border-gray-200 h-full fixed left-0 top-0 transition-all duration-300 z-30 ${
+        collapsed ? "w-16" : "w-64"
+      }`}
+    >
+      {/* Top Section with Logo */}
+      <div className="bg-white border-b border-gray-200 p-4 flex items-center justify-between h-16">
+        {!collapsed ? (
+          <div className="flex items-center space-x-2">
+            <Zap className="text-blue-500" />
+            <span className="font-bold text-gray-800">ACME-Electronics</span>
+          </div>
+        ) : (
+          <Zap className="text-blue-500 mx-auto" />
+        )}
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className="text-gray-500 hover:text-gray-700"
+        >
+          {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+        </button>
+      </div>
+
+      {/* Navigation Items */}
+      <nav className="mt-2 overflow-y-auto h-[calc(100%-4rem)]">
+        {/* Main Navigation */}
+        <div className="px-3 space-y-1 py-2">
+          <NavItem icon={<LayoutDashboard />} collapsed={collapsed} active>
+            Dashboard
+          </NavItem>
+
+          {/* Example of collapsible menu */}
+          <div>
+            <NavItem
+              icon={<ShoppingCart />}
+              collapsed={collapsed}
+              hasSubmenu
+              isSubmenuOpen={openSubmenu === "products"}
+              onClick={() => toggleSubmenu("products")}
+            >
+              Products
+            </NavItem>
+            {openSubmenu === "products" && !collapsed && (
+              <div className="space-y-1">
+                <SubMenuItem collapsed={collapsed}>All Products</SubMenuItem>
+                <SubMenuItem collapsed={collapsed}>Categories</SubMenuItem>
+                <SubMenuItem collapsed={collapsed}>Add New</SubMenuItem>
+              </div>
+            )}
+          </div>
+
+          <NavItem icon={<Users />} collapsed={collapsed}>
+            Customers
+          </NavItem>
+          <NavItem icon={<Package />} collapsed={collapsed}>
+            Inventory
+          </NavItem>
+        </div>
+
+        <div className="border-t border-gray-200 mx-3 my-2"></div>
+
+        {/* Integrations */}
+        <div className="px-3 space-y-1 py-2">
+          {!collapsed && (
+            <p className="text-gray-500 text-xs uppercase font-semibold">
+              Integrations
+            </p>
+          )}
+          <NavItem icon={<Home />} collapsed={collapsed}>
+            Amazon
+          </NavItem>
+          <NavItem icon={<Home />} collapsed={collapsed}>
+            Shopify
+          </NavItem>
+        </div>
+
+        <div className="border-t border-gray-200 mx-3 my-2"></div>
+
+        {/* Settings */}
+        <div className="px-3 space-y-0.5 py-1.5">
+          <NavItem icon={<Settings />} collapsed={collapsed}>
+            Settings
+          </NavItem>
+          <NavItem icon={<LogOut />} collapsed={collapsed}>
+            Logout
+          </NavItem>
+        </div>
+      </nav>
+    </div>
+  );
+};
+
+export default DashboardSideNav;

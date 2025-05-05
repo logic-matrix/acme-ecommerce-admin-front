@@ -1,3 +1,5 @@
+// app/dashboard/layout.tsx
+import DashboardLayoutClient from "@/components/dashboard/DashboardLayoutClient";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,15 +13,5 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <div className="flex h-screen">
-      {/* <DashboardSideNav /> */}
-      <div className="flex flex-col flex-1 ml-60">
-        {/* <DashboardTopNav /> */}
-        <div className="bg-slate-200 flex-1 p-4 mt-12 overflow-auto">
-          {children}
-        </div>
-      </div>
-    </div>
-  );
+  return <DashboardLayoutClient>{children}</DashboardLayoutClient>;
 }

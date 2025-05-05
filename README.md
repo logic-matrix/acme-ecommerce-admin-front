@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ACME Electronics – Frontend
 
-## Getting Started
+This is the **frontend** of the ACME Electronics e-commerce platform, built using **Next.js 15** with the App Router architecture. It provides a modern, scalable, and SEO-friendly frontend for the ACME Electronics ecosystem.
 
-First, run the development server:
+---
+
+## 🚀 Tech Stack
+
+- **Framework**: [Next.js 15 (App Router)](https://nextjs.org/)
+- **Language**: TypeScript / JavaScript (based on project setup)
+- **Styling**: Tailwind CSS / CSS Modules / SCSS (specify what you used)
+- **State Management**: Context API / Redux / Zustand (if used)
+- **Forms**: React Hook Form / Formik (if applicable)
+- **Authentication**: NextAuth.js / Clerk / Custom (if applicable)
+- **API Integration**: REST / GraphQL / tRPC (depending on your setup)
+
+---
+
+
+---
+
+## 📦 Getting Started
+
+### 1. Clone the Repository
+
+```bash
+git clone git@github.com-work:logic-matrix/acme-ecommerce-admin-front.git
+cd acme-ecommerce-admin-front
+```
+
+### 2. Install Dependencies
+
+Using **npm**:
+
+```bash
+npm install
+```
+
+Or with **yarn**:
+
+```bash
+yarn install
+```
+
+### 3. Configure Environment Variables
+
+Create a `.env.local` file based on `.env.example` (if available) and set the necessary environment variables:
+
+Set values like:
+
+```env
+NEXT_PUBLIC_API_BASE_URL=https://api.example.com
+NEXTAUTH_SECRET=your-secret
+```
+
+### 4. Run the Development Server
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit `http://localhost:3000` to view the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔧 Available Scripts
 
-## Learn More
+```bash
+npm run dev       # Start the dev server
+npm run build     # Build for production
+npm run start     # Start production server
+npm run lint      # Lint the code
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 👥 Contributing
 
-## Deploy on Vercel
+1. Fork the repo
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit your changes: `git commit -m "Add your feature"`
+4. Push to the branch: `git push origin feature/your-feature`
+5. Open a Pull Request
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📬 Contact
+
+For any issues or collaboration inquiries:
+
+- **Team**: Logic Matrix
