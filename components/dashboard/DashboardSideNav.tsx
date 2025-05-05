@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { ReactElement, ReactNode, cloneElement, useState } from "react";
+import { SiAmazon, SiShopify } from "react-icons/si";
 
 type LucideIconProps = React.ComponentProps<typeof Icon>;
 
@@ -175,10 +176,10 @@ const DashboardSideNav = ({
               Integrations
             </p>
           )}
-          <NavItem icon={<Home />} collapsed={collapsed}>
+          <NavItem icon={<SiAmazon />} collapsed={collapsed}>
             Amazon
           </NavItem>
-          <NavItem icon={<Home />} collapsed={collapsed}>
+          <NavItem icon={<SiShopify />} collapsed={collapsed}>
             Shopify
           </NavItem>
         </div>
