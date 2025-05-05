@@ -24,7 +24,7 @@ const DashboardTopNav = ({
               <Search className="h-5 w-5 text-gray-700" />
             </div>
             <input
-              className="block text-slate-600 w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500 text-base"
+              className="block text-slate-600 w-full pl-10 pr-4 py-2.5 border border-gray-400 rounded-lg leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500 text-base"
               placeholder="Search products, customers, orders..."
               type="search"
             />
@@ -32,8 +32,8 @@ const DashboardTopNav = ({
         </div>
 
         {/* Notification and User Info */}
-        <div className="flex items-center space-x-6 ml-6">
-          <button className="relative group p-2 rounded-md bg-white hover:shadow-sm transition duration-200">
+        <div className="flex items-center space-x-4 ml-6">
+          <button className="relative group p-2 rounded-md bg-white border border-gray-300 hover:shadow-sm transition duration-200">
             <Bell
               className="text-gray-600 group-hover:text-blue-600"
               size={20}
@@ -41,7 +41,6 @@ const DashboardTopNav = ({
             {""}
             <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white" />
           </button>
-
           <div className="relative">
             <button
               onClick={() => setUserDropdownOpen(!userDropdownOpen)}
@@ -54,7 +53,7 @@ const DashboardTopNav = ({
                 <div className="text-sm font-semibold text-gray-800">
                   Admin User
                 </div>
-                <div className="text-xs text-gray-500">Administrator</div>
+                <div className="text-xs text-gray-500">Admin</div>
               </div>
               <ChevronDown
                 size={16}
@@ -66,12 +65,6 @@ const DashboardTopNav = ({
 
             {userDropdownOpen && (
               <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg py-2 z-20 border border-gray-200">
-                <Link
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
-                >
-                  Your Profile
-                </Link>
                 <Link
                   href="#"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
