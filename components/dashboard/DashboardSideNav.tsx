@@ -14,9 +14,11 @@ import {
   Icon,
   ChevronDown,
   ChevronUp,
+  ListOrdered,
 } from "lucide-react";
 import Link from "next/link";
 import { ReactElement, ReactNode, cloneElement, useState } from "react";
+import { MdPayment } from "react-icons/md";
 import { SiAmazon, SiShopify } from "react-icons/si";
 import { Toaster } from "sonner";
 
@@ -30,6 +32,7 @@ interface NavItemProps {
   hasSubmenu?: boolean;
   isSubmenuOpen?: boolean;
   onClick?: () => void;
+  href?: string;
 }
 
 const NavItem = ({
@@ -40,10 +43,11 @@ const NavItem = ({
   hasSubmenu = false,
   isSubmenuOpen = false,
   onClick,
+  href = "#",
 }: NavItemProps) => {
   return (
     <Link
-      href="#"
+      href={href}
       onClick={onClick}
       className={`flex items-center p-2.5 rounded-lg transition-colors ${
         active
@@ -78,12 +82,13 @@ const NavItem = ({
 interface SubMenuItemProps {
   children: ReactNode;
   collapsed: boolean;
+  href: string;
 }
 
-const SubMenuItem = ({ children, collapsed }: SubMenuItemProps) => {
+const SubMenuItem = ({ children, collapsed, href }: SubMenuItemProps) => {
   return (
     <Link
-      href="#"
+      href={href}
       className={`flex items-center text-sm p-2 pl-11 rounded-lg transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 ${
         collapsed ? "hidden" : "block"
       }`}
@@ -96,16 +101,23 @@ const SubMenuItem = ({ children, collapsed }: SubMenuItemProps) => {
 interface DashboardSideNavProps {
   collapsed: boolean;
   setCollapsed: (collapsed: boolean) => void;
+  activePath?: string;
 }
 
 const DashboardSideNav = ({
   collapsed,
   setCollapsed,
+  activePath = "/dashboard",
 }: DashboardSideNavProps) => {
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
 
   const toggleSubmenu = (menu: string) => {
     setOpenSubmenu(openSubmenu === menu ? null : menu);
+  };
+
+  // Helper function to check if a path is active
+  const isActive = (path: string) => {
+    return activePath === path;
   };
 
   return (
@@ -137,11 +149,33 @@ const DashboardSideNav = ({
       <nav className="mt-2 overflow-y-auto h-[calc(100%-4rem)]">
         {/* Main Navigation */}
         <div className="px-3 space-y-1 py-2">
-          <NavItem icon={<LayoutDashboard />} collapsed={collapsed} active>
+          <NavItem
+            icon={<LayoutDashboard />}
+            collapsed={collapsed}
+            active={isActive("/dashboard")}
+            href="/dashboard"
+          >
             Dashboard
           </NavItem>
 
-          {/* Example of collapsible menu */}
+          <NavItem
+            icon={<ListOrdered />}
+            collapsed={collapsed}
+            active={isActive("/products")}
+            href="/products"
+          >
+            Products
+          </NavItem>
+          <NavItem
+            icon={<ListOrdered />}
+            collapsed={collapsed}
+            active={isActive("/orders")}
+            href="/orders"
+          >
+            Orders
+          </NavItem>
+
+          {/* Products Submenu */}
           <div>
             <NavItem
               icon={<ShoppingCart />}
@@ -149,23 +183,52 @@ const DashboardSideNav = ({
               hasSubmenu
               isSubmenuOpen={openSubmenu === "products"}
               onClick={() => toggleSubmenu("products")}
+              active={
+                isActive("/products") ||
+                isActive("/products/categories") ||
+                isActive("/products/new")
+              }
             >
               Products
             </NavItem>
             {openSubmenu === "products" && !collapsed && (
               <div className="space-y-1">
-                <SubMenuItem collapsed={collapsed}>All Products</SubMenuItem>
-                <SubMenuItem collapsed={collapsed}>Categories</SubMenuItem>
-                <SubMenuItem collapsed={collapsed}>Add New</SubMenuItem>
+                <SubMenuItem collapsed={collapsed} href="/products">
+                  All Products
+                </SubMenuItem>
+                <SubMenuItem collapsed={collapsed} href="/products/categories">
+                  Categories
+                </SubMenuItem>
+                <SubMenuItem collapsed={collapsed} href="/products/new">
+                  Add New
+                </SubMenuItem>
               </div>
             )}
           </div>
 
-          <NavItem icon={<Users />} collapsed={collapsed}>
-            Customers
+          <NavItem
+            icon={<Package />}
+            collapsed={collapsed}
+            active={isActive("/inventory")}
+            href="/inventory"
+          >
+            Category
           </NavItem>
-          <NavItem icon={<Package />} collapsed={collapsed}>
-            Inventory
+          <NavItem
+            icon={<Users />}
+            collapsed={collapsed}
+            active={isActive("/users")}
+            href="/users"
+          >
+            users
+          </NavItem>
+          <NavItem
+            icon={<MdPayment />}
+            collapsed={collapsed}
+            active={isActive("/payments")}
+            href="/payments"
+          >
+            Payments
           </NavItem>
         </div>
 
@@ -178,10 +241,20 @@ const DashboardSideNav = ({
               Integrations
             </p>
           )}
-          <NavItem icon={<SiAmazon />} collapsed={collapsed}>
+          <NavItem
+            icon={<SiAmazon />}
+            collapsed={collapsed}
+            active={isActive("/integrations/amazon")}
+            href="/integrations/amazon"
+          >
             Amazon
           </NavItem>
-          <NavItem icon={<SiShopify />} collapsed={collapsed}>
+          <NavItem
+            icon={<SiShopify />}
+            collapsed={collapsed}
+            active={isActive("/integrations/shopify")}
+            href="/integrations/shopify"
+          >
             Shopify
           </NavItem>
         </div>
@@ -190,7 +263,12 @@ const DashboardSideNav = ({
 
         {/* Settings */}
         <div className="px-3 space-y-0.5 py-1.5">
-          <NavItem icon={<Settings />} collapsed={collapsed}>
+          <NavItem
+            icon={<Settings />}
+            collapsed={collapsed}
+            active={isActive("/settings")}
+            href="/settings"
+          >
             Settings
           </NavItem>
           <NavItem
