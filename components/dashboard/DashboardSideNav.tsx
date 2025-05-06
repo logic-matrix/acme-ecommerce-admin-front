@@ -15,9 +15,12 @@ import {
   ChevronDown,
   ChevronUp,
   ListOrdered,
+  CreditCard,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { ReactElement, ReactNode, cloneElement, useState } from "react";
+import { BiCategory } from "react-icons/bi";
 import { SiAmazon, SiShopify } from "react-icons/si";
 import { Toaster } from "sonner";
 
@@ -129,12 +132,17 @@ const DashboardSideNav = ({
       {/* Top Section with Logo */}
       <div className="bg-white border-b border-gray-200 p-4 flex items-center justify-between h-16">
         {!collapsed ? (
-          <div className="flex items-center space-x-2">
-            <Zap className="text-blue-500" />
-            <span className="font-bold text-gray-800">ACME-Electronics</span>
+          <div className="flex items-center">
+            <Image
+              src="/acme-electronics.svg"
+              alt="ACME Electronics Logo"
+              width={32}
+              height={32}
+              className="h-8 w-auto object-contain"
+            />
           </div>
         ) : (
-          <Zap className="text-blue-500 mx-auto" />
+          <Zap className="text-orange-500 mx-auto" />
         )}
         <button
           onClick={() => setCollapsed(!collapsed)}
@@ -157,6 +165,14 @@ const DashboardSideNav = ({
             Dashboard
           </NavItem>
 
+          <NavItem
+            icon={<Package />}
+            collapsed={collapsed}
+            active={isActive("/products")}
+            href="/products"
+          >
+            Products
+          </NavItem>
           <NavItem
             icon={<ListOrdered />}
             collapsed={collapsed}
@@ -198,20 +214,28 @@ const DashboardSideNav = ({
           </div>
 
           <NavItem
-            icon={<Users />}
+            icon={<BiCategory />}
             collapsed={collapsed}
-            active={isActive("/customers")}
-            href="/customers"
+            active={isActive("/category")}
+            href="/category"
           >
-            Customers
+            Category
           </NavItem>
           <NavItem
-            icon={<Package />}
+            icon={<Users />}
             collapsed={collapsed}
-            active={isActive("/inventory")}
-            href="/inventory"
+            active={isActive("/users")}
+            href="/users"
           >
-            Inventory
+            Users
+          </NavItem>
+          <NavItem
+            icon={<CreditCard />}
+            collapsed={collapsed}
+            active={isActive("/payments")}
+            href="/payments"
+          >
+            Payments
           </NavItem>
         </div>
 
