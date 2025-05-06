@@ -28,9 +28,6 @@ export default function SignInPage() {
   // Handle form submit
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // console.log("Email:", email);
-    // console.log("Password:", password);
-    // console.log("Remember Me:", rememberMe);
     if (!rememberMe) {
       toast("must check remember me");
       return;
@@ -42,7 +39,7 @@ export default function SignInPage() {
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/login`,
           { email, password },
           {
-            withCredentials: true, // Important to send cookies!
+            withCredentials: true,
           }
         );
 
@@ -50,15 +47,17 @@ export default function SignInPage() {
 
         if (response.status === 200) {
           toast("Signed in successfully!");
-          router.push("/"); // Redirect after login
+          if (response.data?.user.role === "admin") {
+            router.push("/dashboard");
+          } else {
+            router.push("/");
+          }
         }
       } catch (err: unknown) {
         if (axios.isAxiosError(err) && err.response) {
           toast(err.response.data?.error || "Login failed");
-          // console.log(err.response.data?.error || "Login failed");
         } else {
           toast("Login failed");
-          // console.log("An unexpected error occurred");
         }
       } finally {
         setLoading(false);
@@ -69,7 +68,6 @@ export default function SignInPage() {
   return (
     <div className="flex max-h-screen">
       <Toaster position="top-right" />
-      {/* Left Side - Image */}
       <div className="hidden md:flex w-1/2 bg-black items-center justify-center relative h-screen">
         <Image
           src="/login/image.webp"
