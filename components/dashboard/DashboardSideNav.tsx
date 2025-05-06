@@ -14,6 +14,7 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { ReactElement, ReactNode, cloneElement, useState } from "react";
 import { SiAmazon, SiShopify } from "react-icons/si";
@@ -27,6 +28,7 @@ interface NavItemProps {
   active?: boolean;
   hasSubmenu?: boolean;
   isSubmenuOpen?: boolean;
+  href?: string;
   onClick?: () => void;
 }
 
@@ -37,12 +39,22 @@ const NavItem = ({
   active = false,
   hasSubmenu = false,
   isSubmenuOpen = false,
+  href = "#",
   onClick,
 }: NavItemProps) => {
+  // If it has a submenu, we want to handle the click to toggle the submenu
+  // Otherwise, it should behave as a normal link
+  const handleClick = (e: React.MouseEvent) => {
+    if (hasSubmenu) {
+      e.preventDefault();
+      onClick?.();
+    }
+  };
+
   return (
     <Link
-      href="#"
-      onClick={onClick}
+      href={href}
+      onClick={handleClick}
       className={`flex items-center p-2.5 rounded-lg transition-colors ${
         active
           ? "bg-blue-50 text-blue-600"
@@ -76,12 +88,13 @@ const NavItem = ({
 interface SubMenuItemProps {
   children: ReactNode;
   collapsed: boolean;
+  href: string;
 }
 
-const SubMenuItem = ({ children, collapsed }: SubMenuItemProps) => {
+const SubMenuItem = ({ children, collapsed, href }: SubMenuItemProps) => {
   return (
     <Link
-      href="#"
+      href={href}
       className={`flex items-center text-sm p-2 pl-11 rounded-lg transition-colors text-gray-600 hover:bg-gray-100 hover:text-gray-900 ${
         collapsed ? "hidden" : "block"
       }`}
@@ -115,12 +128,17 @@ const DashboardSideNav = ({
       {/* Top Section with Logo */}
       <div className="bg-white border-b border-gray-200 p-4 flex items-center justify-between h-16">
         {!collapsed ? (
-          <div className="flex items-center space-x-2">
-            <Zap className="text-blue-500" />
-            <span className="font-bold text-gray-800">ACME-Electronics</span>
+          <div className="flex items-center">
+            <Image
+              src="/acme-electronics.svg"
+              alt="ACME Electronics Logo"
+              width={32}
+              height={32}
+              className="h-8 w-auto object-contain"
+            />
           </div>
         ) : (
-          <Zap className="text-blue-500 mx-auto" />
+          <Zap className="text-orange-500 mx-auto" />
         )}
         <button
           onClick={() => setCollapsed(!collapsed)}
@@ -134,14 +152,19 @@ const DashboardSideNav = ({
       <nav className="mt-2 overflow-y-auto h-[calc(100%-4rem)]">
         {/* Main Navigation */}
         <div className="px-3 space-y-1 py-2">
-          <NavItem icon={<LayoutDashboard />} collapsed={collapsed} active>
+          <NavItem
+            icon={<LayoutDashboard />}
+            collapsed={collapsed}
+            active
+            href="/dashboard"
+          >
             Dashboard
           </NavItem>
 
-          {/* Example of collapsible menu */}
+          {/* Products with submenu */}
           <div>
             <NavItem
-              icon={<ShoppingCart />}
+              icon={<Package />}
               collapsed={collapsed}
               hasSubmenu
               isSubmenuOpen={openSubmenu === "products"}
@@ -151,18 +174,27 @@ const DashboardSideNav = ({
             </NavItem>
             {openSubmenu === "products" && !collapsed && (
               <div className="space-y-1">
-                <SubMenuItem collapsed={collapsed}>All Products</SubMenuItem>
-                <SubMenuItem collapsed={collapsed}>Categories</SubMenuItem>
-                <SubMenuItem collapsed={collapsed}>Add New</SubMenuItem>
+                <SubMenuItem href="/products" collapsed={collapsed}>
+                  All Products
+                </SubMenuItem>
+                <SubMenuItem href="/products/categories" collapsed={collapsed}>
+                  Categories
+                </SubMenuItem>
+                <SubMenuItem href="/products/new" collapsed={collapsed}>
+                  Add New
+                </SubMenuItem>
               </div>
             )}
           </div>
 
-          <NavItem icon={<Users />} collapsed={collapsed}>
-            Customers
+          <NavItem icon={<ShoppingCart />} collapsed={collapsed} href="/orders">
+            Orders
           </NavItem>
-          <NavItem icon={<Package />} collapsed={collapsed}>
-            Inventory
+          <NavItem icon={<Users />} collapsed={collapsed} href="/category">
+            Category
+          </NavItem>
+          <NavItem icon={<Users />} collapsed={collapsed} href="/users">
+            Users
           </NavItem>
         </div>
 
@@ -175,10 +207,18 @@ const DashboardSideNav = ({
               Integrations
             </p>
           )}
-          <NavItem icon={<SiAmazon />} collapsed={collapsed}>
+          <NavItem
+            icon={<SiAmazon />}
+            collapsed={collapsed}
+            href="/integrations/amazon"
+          >
             Amazon
           </NavItem>
-          <NavItem icon={<SiShopify />} collapsed={collapsed}>
+          <NavItem
+            icon={<SiShopify />}
+            collapsed={collapsed}
+            href="/integrations/shopify"
+          >
             Shopify
           </NavItem>
         </div>
@@ -187,10 +227,10 @@ const DashboardSideNav = ({
 
         {/* Settings */}
         <div className="px-3 space-y-0.5 py-1.5">
-          <NavItem icon={<Settings />} collapsed={collapsed}>
+          <NavItem icon={<Settings />} collapsed={collapsed} href="/settings">
             Settings
           </NavItem>
-          <NavItem icon={<LogOut />} collapsed={collapsed}>
+          <NavItem icon={<LogOut />} collapsed={collapsed} href="/logout">
             Logout
           </NavItem>
         </div>
