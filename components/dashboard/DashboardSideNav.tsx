@@ -1,5 +1,6 @@
 "use client";
 
+import { handleLogout } from "@/lib/logout";
 import {
   LayoutDashboard,
   ShoppingCart,
@@ -18,6 +19,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ReactElement, ReactNode, cloneElement, useState } from "react";
 import { SiAmazon, SiShopify } from "react-icons/si";
+import { Toaster } from "sonner";
 
 type LucideIconProps = React.ComponentProps<typeof Icon>;
 
@@ -125,6 +127,7 @@ const DashboardSideNav = ({
         collapsed ? "w-16" : "w-64"
       }`}
     >
+      <Toaster />
       {/* Top Section with Logo */}
       <div className="bg-white border-b border-gray-200 p-4 flex items-center justify-between h-16">
         {!collapsed ? (
@@ -230,7 +233,11 @@ const DashboardSideNav = ({
           <NavItem icon={<Settings />} collapsed={collapsed} href="/settings">
             Settings
           </NavItem>
-          <NavItem icon={<LogOut />} collapsed={collapsed} href="/logout">
+          <NavItem
+            icon={<LogOut />}
+            collapsed={collapsed}
+            onClick={handleLogout}
+          >
             Logout
           </NavItem>
         </div>

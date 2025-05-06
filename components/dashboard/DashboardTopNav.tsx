@@ -1,8 +1,10 @@
 "use client";
 
+import { handleLogout } from "@/lib/logout";
 import { Search, Bell, ChevronDown, User } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { Toaster } from "sonner";
 
 const DashboardTopNav = ({
   sidebarCollapsed,
@@ -18,6 +20,7 @@ const DashboardTopNav = ({
       }`}
     >
       <div className="flex items-center justify-between px-6 h-full">
+        <Toaster />
         <div className="flex items-center flex-1 max-w-2xl">
           <div className="relative w-full">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -71,12 +74,12 @@ const DashboardTopNav = ({
                 >
                   Settings
                 </Link>
-                <Link
-                  href="#"
-                  className="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"
+                <p
+                  className="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition cursor-pointer"
+                  onClick={handleLogout}
                 >
                   Logout
-                </Link>
+                </p>
               </div>
             )}
           </div>
