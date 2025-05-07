@@ -169,7 +169,7 @@ const DashboardSideNav = ({
             icon={<Package />}
             collapsed={collapsed}
             active={isActive("/products")}
-            href="/products"
+            href="/dashboard/products"
           >
             Products
           </NavItem>
@@ -177,7 +177,7 @@ const DashboardSideNav = ({
             icon={<ListOrdered />}
             collapsed={collapsed}
             active={isActive("/orders")}
-            href="/orders"
+            href="/dashboard/orders"
           >
             Orders
           </NavItem>
@@ -217,7 +217,7 @@ const DashboardSideNav = ({
             icon={<BiCategory />}
             collapsed={collapsed}
             active={isActive("/category")}
-            href="/category"
+            href="/dashboard/category"
           >
             Category
           </NavItem>
@@ -225,7 +225,7 @@ const DashboardSideNav = ({
             icon={<Users />}
             collapsed={collapsed}
             active={isActive("/users")}
-            href="/users"
+            href="/dashboard/users"
           >
             Users
           </NavItem>
@@ -233,7 +233,7 @@ const DashboardSideNav = ({
             icon={<CreditCard />}
             collapsed={collapsed}
             active={isActive("/payments")}
-            href="/payments"
+            href="/dashboard/payments"
           >
             Payments
           </NavItem>

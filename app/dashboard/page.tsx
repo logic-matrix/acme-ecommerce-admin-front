@@ -111,8 +111,6 @@ const getStatusColor = (status: string) => {
 };
 
 const Home = () => {
-  const user = useUserStore((state) => state.user);
-  console.log(user);
   return (
     <div className="container">
       {/* Dashboard and date time and filter */}

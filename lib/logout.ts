@@ -12,6 +12,7 @@ export const handleLogout = () => {
       .then((response) => {
         // console.log("Logout successful:", response.data);
         toast.success(response.data.message);
+        window.location.href = "/sign-in";
       });
   } catch (error) {
     console.error("Logout failed:", error);

@@ -1,5 +1,6 @@
 "use client";
 
+import { useUserStore } from "@/app/store/useUserStore";
 import { handleLogout } from "@/lib/logout";
 import { Search, Bell, ChevronDown, User } from "lucide-react";
 import Link from "next/link";
@@ -12,7 +13,7 @@ const DashboardTopNav = ({
   sidebarCollapsed: boolean;
 }) => {
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
-
+  const user = useUserStore((state) => state.user);
   return (
     <header
       className={`bg-white shadow-sm fixed top-0 h-16 z-20 transition-all duration-300 ${
@@ -54,7 +55,7 @@ const DashboardTopNav = ({
               </div>
               <div className="hidden md:block text-left">
                 <div className="text-sm font-semibold text-gray-800">
-                  Admin User
+                  {user?.name ? user.name : "Admin User"}
                 </div>
                 <div className="text-xs text-gray-500">Admin</div>
               </div>
