@@ -9,6 +9,7 @@ import {
   CustomTableHeader,
   CustomTableRow,
 } from "@/components/dashboard/CustomDataTable";
+import RevenueChart from "@/components/dashboard/RevenueChart";
 import TotalStatCard from "@/components/dashboard/TotalStatCard";
 // import { Badge } from "@/components/ui/badge";
 
@@ -95,13 +96,13 @@ const products = [
 const getStatusColor = (status: string) => {
   switch (status) {
     case "pending":
-      return "bg-orange-100 text-orange-900";
+      return "bg-orange-100 text-orange-500";
     case "processing":
-      return "bg-purple-100 text-purple-900";
+      return "bg-purple-100 text-purple-500";
     case "cancelled":
-      return "bg-red-100  text-red-900";
+      return "bg-red-100  text-red-500";
     case "complete":
-      return "bg-green-100 text-green-900";
+      return "bg-green-100 text-green-500";
 
     default:
       return "bg-gray-100 text-gray-800";
@@ -140,7 +141,7 @@ const Home = () => {
         />
       </div>
       {/* Graph */}
-
+      <RevenueChart />
       <div className="grid grid-cols-4 justify-between items-stretch gap-2 ">
         {/* Recent Order table  */}
         <div className="col-span-3 font- p-2 w-full rounded-lg">
