@@ -1,6 +1,5 @@
 "use client";
 import { cn } from "@/lib/utils";
-// import { AreaChart } from "lucide-react";
 import { useState } from "react";
 import {
   Area,
@@ -8,6 +7,7 @@ import {
   CartesianGrid,
   ResponsiveContainer,
   Tooltip,
+  TooltipProps,
   XAxis,
   YAxis,
 } from "recharts";
@@ -33,18 +33,15 @@ const mockData: RevenueData[] = [
   { name: "DEC", revenue: 4100, date: "2025-12-01" },
 ];
 
-const CustomTooltip = ({
-  active,
-  payload,
-}: {
-  active?: boolean;
-  payload?: any[];
-}) => {
-  if (active && payload && payload.length) {
+// Fix for the CustomTooltip component
+const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
+  if (active && payload && payload.length > 0 && payload[0]) {
     return (
       <div className="bg-black text-white p-3 rounded-md shadow-md text-sm">
         <p className="text-xs font-medium text-gray-300 mb-1">{`${payload[0].payload.date} sales`}</p>
-        <p className="font-semibold">${payload[0].value.toLocaleString()}</p>
+        <p className="font-semibold">
+          ${payload[0].value?.toLocaleString() || "0"}
+        </p>
       </div>
     );
   }
@@ -78,15 +75,18 @@ const TimeFilterButton = ({
 
 export default function RevenueChart() {
   const [timeFilter, setTimeFilter] = useState<TimeFilterOption>("30 days");
-  const [activeIndex, setActiveIndex] = useState<number | null>(null); // used to track the currently hovered point in the chart (not directly shown, but can be used for animation or focus)
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  console.log(activeIndex);
 
   const handleTimeFilterChange = (option: TimeFilterOption) => {
     setTimeFilter(option);
   };
 
-  const handleMouseMove = (data: any) => {
-    if (data && data.activeTooltipIndex !== undefined) {
-      setActiveIndex(data.activeTooltipIndex);
+  // Using proper type for mouse events from recharts
+  const handleMouseMove = (data: unknown) => {
+    // Type guard to check and safely access activeTooltipIndex
+    if (data && typeof data === "object" && "activeTooltipIndex" in data) {
+      setActiveIndex(data.activeTooltipIndex as number);
     }
   };
 
