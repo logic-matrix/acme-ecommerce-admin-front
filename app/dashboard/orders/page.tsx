@@ -67,7 +67,10 @@ export default function OrdersPage() {
             Manage your orders right from here
           </p>
         </div>
-        <Button className=" cursor-pointer border px-4 py-2 rounded shadow text-sm flex items-center">
+        <Button
+          variant="outline"
+          className="cursor-pointer border px-4 py-2 rounded shadow text-sm flex items-center"
+        >
           <Anchor className="mr-2" size={15} />
           Export
         </Button>
@@ -88,7 +91,7 @@ export default function OrdersPage() {
         />
         <TotalStatCard
           total={120}
-          growthPercentage={2.4}
+          growthPercentage={-1.3}
           icon="/shipping.svg"
           title="Shipped"
         />
@@ -100,11 +103,11 @@ export default function OrdersPage() {
         />
       </div>
 
-      <div>
-        <div className="flex flex-col">
-          <h1 className="font-semibold text-3xl">Orders</h1>
+      <div className="pt-4">
+        <div className="flex flex-col mb-4">
+          <h1 className="font-semibold text-2xl">Recent Orders</h1>
           <p className="font-medium text-gray-500 text-base">
-            Manage your orders right from here
+            Manage and review your recent orders
           </p>
         </div>
         <CustomTable>
@@ -160,7 +163,9 @@ export default function OrdersPage() {
           <button
             key={i}
             className={`px-3 py-1 text-sm border rounded ${
-              currentPage === i + 1 ? "bg-gray-200 font-semibold" : ""
+              currentPage === i + 1
+                ? "bg-gray-900 font-semibold text-white"
+                : ""
             }`}
             onClick={() => setCurrentPage(i + 1)}
           >
