@@ -11,6 +11,7 @@ import {
 import TotalStatCard from "@/components/dashboard/TotalStatCard";
 import { Button } from "@/components/ui/button";
 import { Eye, Trash2, Anchor } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 interface Order {
@@ -141,7 +142,9 @@ export default function OrdersPage() {
                 </CustomTableCell>
                 <CustomTableCell>
                   <div className="flex gap-2">
-                    <Eye className="w-4 h-4 text-gray-600 hover:text-blue-600 cursor-pointer" />
+                    <Link href={`/dashboard/orders/${order.id}`}>
+                      <Eye className="w-4 h-4 text-gray-600 hover:text-blue-600 cursor-pointer" />
+                    </Link>
                     <Trash2 className="w-4 h-4 text-red-400 hover:text-red-600 cursor-pointer" />
                   </div>
                 </CustomTableCell>
