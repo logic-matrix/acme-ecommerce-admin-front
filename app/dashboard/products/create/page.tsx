@@ -1,15 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -20,100 +11,107 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { UploadCloud } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
-export default function AddProductModal() {
+export default function AddProductPage() {
   const [fileName, setFileName] = useState("");
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button>Add Product</Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px]">
-        <DialogHeader>
-          <DialogTitle>Add Product</DialogTitle>
-        </DialogHeader>
+    <div className="max-w-3xl mx-auto p-6 bg-white rounded-xl shadow-md space-y-6 border ">
+      <h2 className="text-2xl font-semibold ">Add Product</h2>
 
-        <div className="grid gap-4 py-4">
-          <div>
-            <Label htmlFor="name">Product Name</Label>
-            <Input id="name" placeholder="Value" />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="category">Category</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="electronics">Electronics</SelectItem>
-                  <SelectItem value="fashion">Fashion</SelectItem>
-                  <SelectItem value="books">Books</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label htmlFor="price">Price</Label>
-              <Input id="price" placeholder="Input" type="number" />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="stock">Stock</Label>
-              <Input id="stock" placeholder="Input" type="number" />
-            </div>
-
-            <div>
-              <Label htmlFor="status">Status</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="available">Available</SelectItem>
-                  <SelectItem value="unavailable">Unavailable</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div>
-            <Label>Product Images</Label>
-            <label
-              htmlFor="file-upload"
-              className="flex flex-col items-center justify-center border border-dashed border-gray-300 rounded-md h-36 cursor-pointer text-sm text-muted-foreground"
-            >
-              <UploadCloud className="w-6 h-6 mb-2" />
-              {fileName ? fileName : "Click to upload or drag images here"}
-              <p className="text-xs text-gray-500 mt-1">
-                Image Size Must be less than 3 MB
-              </p>
-              <input
-                id="file-upload"
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) setFileName(file.name);
-                }}
-                className="hidden"
-              />
-            </label>
-          </div>
+      <div className="space-y-4">
+        {/* Product Name */}
+        <div>
+          <Label htmlFor="productName" className="mb-3">
+            Product Name
+          </Label>
+          <Input id="productName" placeholder="Enter product name" />
         </div>
 
-        <DialogFooter className="mt-2">
-          <DialogClose asChild>
-            <Button variant="ghost">Cancel</Button>
-          </DialogClose>
+        {/* Category  & Price*/}
+        <div className="flex  justify-between">
+          <div>
+            <Label className="mb-3">Category</Label>
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Select a category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="electronics">Electronics</SelectItem>
+                <SelectItem value="fashion">Fashion</SelectItem>
+                <SelectItem value="books">Books</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <Label htmlFor="price" className="mb-3">
+              Price
+            </Label>
+            <Input id="price" type="number" placeholder="Enter price" />
+          </div>
+
+          {/* Stock */}
+          <div>
+            <Label htmlFor="stock" className="mb-3">
+              Stock
+            </Label>
+            <Input
+              id="stock"
+              type="number"
+              placeholder="Enter stock quantity"
+            />
+          </div>
+
+          {/* Status */}
+          <div>
+            <Label className="mb-3">Status</Label>
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="available">Available</SelectItem>
+                <SelectItem value="unavailable">Unavailable</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        {/* Product Image Upload */}
+        <div>
+          <Label className="mb-3">Product Images</Label>
+          <label
+            htmlFor="product-image"
+            className="flex items-center justify-center border border-dashed border-gray-400 p-4 rounded-md cursor-pointer hover:bg-gray-100 text-gray-500"
+          >
+            <UploadCloud className="mr-2 h-[200px]" />
+            {fileName || "Click to upload or drag images here"}
+          </label>
+          <p className="text-sm text-gray-400 mt-1">
+            Image size must be less than 3 MB
+          </p>
+          <input
+            id="product-image"
+            type="file"
+            accept="image/*" // now accept only image
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) setFileName(file.name);
+            }}
+          />
+        </div>
+
+        {/* Buttons */}
+        <div className="flex justify-end gap-4">
+          <Link href="/dashboard/products">
+            <Button variant="outline">Cancel</Button>
+          </Link>
           <Button type="submit">Add Product</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </div>
+      </div>
+    </div>
   );
 }
