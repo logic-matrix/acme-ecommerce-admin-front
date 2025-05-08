@@ -12,6 +12,8 @@ import {
   CustomTableHeader,
   CustomTableRow,
 } from "@/components/dashboard/CustomDataTable";
+import Image from "next/image";
+import Link from "next/link";
 
 const UserPage = () => {
   const [selectedTab, setSelectedTab] = useState("All Users");
@@ -23,7 +25,7 @@ const UserPage = () => {
       role: "Admin",
       lastActive: "2 Hours ago",
       status: "Active",
-      avatar: "/avatars/user1.jpg",
+      avatar: "/user1.png",
     },
     {
       id: 2,
@@ -31,7 +33,7 @@ const UserPage = () => {
       role: "Admin",
       lastActive: "2 Hours ago",
       status: "Active",
-      avatar: "/avatars/user2.jpg",
+      avatar: "/user1.png",
     },
     {
       id: 3,
@@ -39,7 +41,7 @@ const UserPage = () => {
       role: "Admin",
       lastActive: "2 Hours ago",
       status: "Inactive",
-      avatar: "/avatars/user3.jpg",
+      avatar: "/user1.png",
     },
     {
       id: 4,
@@ -47,7 +49,7 @@ const UserPage = () => {
       role: "Admin",
       lastActive: "2 Hours ago",
       status: "Active",
-      avatar: "/avatars/user4.jpg",
+      avatar: "/user1.png",
     },
   ];
 
@@ -57,16 +59,13 @@ const UserPage = () => {
       : users.filter((user) => user.status === selectedTab);
 
   return (
-    <div className="p-6">
-      {/* Header */}
+    <div>
       <div className="pb-6">
         <h1 className="font-semibold text-3xl">Users</h1>
         <p className="font-medium text-gray-500 text-base">
           Manage your user accounts
         </p>
       </div>
-
-      {/* Stat Cards */}
       <div className="flex gap-5 mb-6">
         <TotalStatCard
           total={1200}
@@ -77,7 +76,7 @@ const UserPage = () => {
         <TotalStatCard
           total={1000}
           growthPercentage={1.3}
-          icon="/user.svg"
+          icon="/user1.svg"
           title="active users"
         />
         <TotalStatCard
@@ -88,12 +87,11 @@ const UserPage = () => {
         />
       </div>
 
-      {/* Tabs */}
       <div className="flex gap-3 mb-6">
         {["All Users", "Active", "Inactive"].map((tab) => (
           <button
             key={tab}
-            className={`px-4 py-1 rounded-full font-medium text-sm border ${
+            className={`px-4 py-1 rounded-full font-medium text-sm border cursor-pointer ${
               selectedTab === tab
                 ? "bg-black text-white"
                 : "bg-gray-100 text-gray-800"
@@ -105,13 +103,7 @@ const UserPage = () => {
         ))}
       </div>
 
-      {/* User List Table */}
       <div>
-        <h1 className="font-semibold text-2xl mb-1">User List</h1>
-        <p className="font-medium text-gray-500 text-base mb-4">
-          Manage your user accounts
-        </p>
-
         <CustomTable>
           <CustomTableHeader>
             <CustomTableRow>
@@ -127,10 +119,12 @@ const UserPage = () => {
               <CustomTableRow key={user.id} variant="striped">
                 <CustomTableCell>
                   <div className="flex items-center gap-2">
-                    <img
+                    <Image
                       src={user.avatar}
                       alt={user.name}
                       className="w-8 h-8 rounded-full"
+                      width={32}
+                      height={32}
                     />
                     <span className="font-medium">{user.name}</span>
                   </div>
@@ -151,16 +145,16 @@ const UserPage = () => {
                   </span>
                 </CustomTableCell>
                 <CustomTableCell>
-                  <div className="flex items-center gap-3">
-                    <button title="View">
+                  <div className="flex items-center gap-3 justify-center w-full">
+                    <Link href={`/dashboard/users/${user.id}`} title="View">
                       <Eye className="w-4 h-4" />
-                    </button>
-                    <button title="Edit">
+                    </Link>
+                    <Link href={`/dashboard/users/${user.id}`} title="View">
                       <Pencil className="w-4 h-4" />
-                    </button>
-                    <button title="Delete">
+                    </Link>
+                    <Link href={`/dashboard/users/${user.id}`} title="View">
                       <Trash2 className="w-4 h-4 text-red-500" />
-                    </button>
+                    </Link>
                   </div>
                 </CustomTableCell>
               </CustomTableRow>
