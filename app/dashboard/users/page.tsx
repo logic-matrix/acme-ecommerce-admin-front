@@ -3,7 +3,15 @@
 import React, { useState } from "react";
 import TotalStatCard from "@/components/dashboard/TotalStatCard";
 
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import {
+  CalendarDays,
+  Eye,
+  Mail,
+  MapPin,
+  Pencil,
+  Phone,
+  Trash2,
+} from "lucide-react";
 import {
   CustomTable,
   CustomTableBody,
@@ -14,6 +22,17 @@ import {
 } from "@/components/dashboard/CustomDataTable";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { add } from "date-fns";
+import ContactInfoLine from "@/components/dashboard/ContactInfoLine";
+import TotalStatUserDetailsCard from "@/components/dashboard/TotalStatUserDetailsCard";
 
 const UserPage = () => {
   const [selectedTab, setSelectedTab] = useState("All Users");
@@ -26,6 +45,12 @@ const UserPage = () => {
       lastActive: "2 Hours ago",
       status: "Active",
       avatar: "/user1.png",
+      address: "23 Main St, New York, NY 10001  ",
+      email: "tarikulabir@gmailcom",
+      phone: "+880 1234567890",
+      createdAt: add(new Date(), { days: -2 }).toDateString(),
+      totalOrders: 120,
+      totalSpent: 1200,
     },
     {
       id: 2,
@@ -34,14 +59,26 @@ const UserPage = () => {
       lastActive: "2 Hours ago",
       status: "Active",
       avatar: "/user1.png",
+      address: "23 Main St, Dhaka, NY 10001  ",
+      email: "tarikulabir@gmailcom",
+      phone: "+880 1234567890",
+      createdAt: add(new Date(), { days: -2 }).toDateString(),
+      totalOrders: 120,
+      totalSpent: 1200,
     },
     {
       id: 3,
-      name: "Tarikul Abir",
+      name: "Logic Matrix",
       role: "Admin",
       lastActive: "2 Hours ago",
       status: "Inactive",
       avatar: "/user1.png",
+      address: "23 Main St, New York, NY 10001  ",
+      email: "tarikulabir@gmailcom",
+      phone: "+880 1234567890",
+      createdAt: add(new Date(), { days: -2 }).toDateString(),
+      totalOrders: 120,
+      totalSpent: 1200,
     },
     {
       id: 4,
@@ -50,6 +87,12 @@ const UserPage = () => {
       lastActive: "2 Hours ago",
       status: "Active",
       avatar: "/user1.png",
+      address: "23 Main St, New York, NY 10001  ",
+      email: "tarikulabir@gmailcom",
+      phone: "+880 1234567890",
+      createdAt: add(new Date(), { days: -2 }).toDateString(),
+      totalOrders: 120,
+      totalSpent: 1200,
     },
   ];
 
@@ -146,9 +189,107 @@ const UserPage = () => {
                 </CustomTableCell>
                 <CustomTableCell>
                   <div className="flex items-center gap-3 justify-center w-full">
-                    <Link href={`/dashboard/users/${user.id}`} title="View">
-                      <Eye className="w-4 h-4" />
-                    </Link>
+                    <Dialog>
+                      <DialogTrigger>
+                        <Eye className="w-4 h-4 cursor-pointer" />
+                      </DialogTrigger>
+                      <DialogContent className="lg:min-w-[616px]">
+                        <DialogHeader>
+                          <DialogTitle>
+                            <div>
+                              <h2 className="font-semibold text-3xl">
+                                User Details
+                              </h2>
+                              <p className="text-sm text-gray-500">
+                                Detailed information about the selected user
+                              </p>
+                            </div>
+                          </DialogTitle>
+                          <DialogDescription>
+                            <div>
+                              <div className="flex items-center gap-4 mb-4 mt-6">
+                                <div>
+                                  <Image
+                                    src={user.avatar}
+                                    alt={user.name}
+                                    className="rounded-full"
+                                    width={56}
+                                    height={56}
+                                  />
+                                </div>
+                                <div>
+                                  <div className="flex items-center gap-2">
+                                    <h3 className="font-bold text-lg text-black">
+                                      {user.name}
+                                    </h3>
+                                    <p className="text-sm text-gray-500">
+                                      #{user.role}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <p
+                                      className={`text-xs inline-block px-3  rounded-[2px] ${
+                                        user.status === "Active"
+                                          ? "bg-green-100 text-green-800"
+                                          : "bg-red-200 text-red-600"
+                                      }`}
+                                    >
+                                      {user.status}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                              {/* Contact Information */}
+                              <div className="bg-[#F9FBFC] p-4 rounded-md">
+                                <h3 className="font-semibold text-lg">
+                                  Contact Information
+                                </h3>
+                                <div>
+                                  <ContactInfoLine
+                                    icon={MapPin}
+                                    label="Address"
+                                    value={user.address}
+                                  />
+                                  <div className="flex items-center gap-2">
+                                    <ContactInfoLine
+                                      icon={Mail}
+                                      label="Email"
+                                      value={user.email}
+                                    />
+                                    <ContactInfoLine
+                                      icon={Phone}
+                                      label="Phone"
+                                      value={user.phone}
+                                    />
+                                  </div>
+
+                                  <ContactInfoLine
+                                    icon={CalendarDays}
+                                    label="Joined"
+                                    value={user.createdAt}
+                                  />
+                                </div>
+                              </div>
+                              {/* details  */}
+                              <div className="flex items-center gap-4 mt-6">
+                                <TotalStatUserDetailsCard
+                                  total={12}
+                                  icon="/cart.svg"
+                                  title="Total Orders"
+                                />
+                                <TotalStatUserDetailsCard
+                                  total={1200}
+                                  icon="/dollar.svg"
+                                  currency
+                                  title="inactive users"
+                                />
+                              </div>
+                            </div>
+                          </DialogDescription>
+                        </DialogHeader>
+                      </DialogContent>
+                    </Dialog>
+
                     <Link href={`/dashboard/users/${user.id}`} title="View">
                       <Pencil className="w-4 h-4" />
                     </Link>
