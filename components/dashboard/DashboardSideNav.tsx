@@ -2,20 +2,20 @@
 
 import { handleLogout } from "@/lib/logout";
 import {
-  LayoutDashboard,
-  ShoppingCart,
-  Users,
-  Package,
-  Settings,
-  LogOut,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Zap,
-  Icon,
-  ChevronDown,
   ChevronUp,
-  ListOrdered,
   CreditCard,
+  Icon,
+  LayoutDashboard,
+  ListOrdered,
+  LogOut,
+  Package,
+  Settings,
+  ShoppingCart,
+  Users,
+  Zap,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -252,7 +252,7 @@ const DashboardSideNav = ({
             icon={<SiAmazon />}
             collapsed={collapsed}
             active={isActive("/integrations/amazon")}
-            href="/integrations/amazon"
+            href="/dashboard/amazon"
           >
             Amazon
           </NavItem>
