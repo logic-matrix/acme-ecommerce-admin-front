@@ -33,32 +33,32 @@ export default function SignUp() {
     }
     if (email && password && name) {
       console.log(email, password, name);
-      // setLoading(true);
-      // try {
-      //   const response = await axios.post(
-      //     `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/register`,
-      //     { email, password, name },
-      //     {
-      //       withCredentials: true,
-      //     }
-      //   );
+      setLoading(true);
+      try {
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/register`,
+          { email, password, name },
+          {
+            withCredentials: true,
+          }
+        );
 
-      //   console.log(response.data);
-      //   console.log(response);
+        console.log(response.data);
+        console.log(response);
 
-      //   if (response.status === 201) {
-      //     toast.success("User Register successfully!");
-      //     router.push("/sign-in");
-      //   }
-      // } catch (err: unknown) {
-      //   if (axios.isAxiosError(err) && err.response) {
-      //     toast(err.response.data?.error || "Login failed");
-      //   } else {
-      //     toast("Register failed");
-      //   }
-      // } finally {
-      //   setLoading(false);
-      // }
+        if (response.status === 201) {
+          toast.success("User Create successfully!");
+          router.push(`/verification?email=${email}&type=register`);
+        }
+      } catch (err: unknown) {
+        if (axios.isAxiosError(err) && err.response) {
+          toast(err.response.data?.error || "Login failed");
+        } else {
+          toast("Register failed");
+        }
+      } finally {
+        setLoading(false);
+      }
     }
   };
   const imageUrl = "bgdots.svg";
