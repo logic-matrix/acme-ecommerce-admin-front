@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/card";
 // import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
-import { Lock, Mail } from "lucide-react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast, Toaster } from "sonner";
