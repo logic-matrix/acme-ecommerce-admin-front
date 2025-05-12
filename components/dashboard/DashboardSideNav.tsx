@@ -266,7 +266,7 @@ const DashboardSideNav = ({
               onClick={() => toggleSubmenu("amazon")}
               active={
                 isActive("/dashboard/amazon/dashboard") ||
-                isActive("/dashboard/amazon/product") ||
+                isActive("/dashboard/amazon/products") ||
                 isActive("/dashboard/amazon/refund")
               }
             >
@@ -282,9 +282,9 @@ const DashboardSideNav = ({
                 </SubMenuItem>
                 <SubMenuItem
                   collapsed={collapsed}
-                  href="/dashboard/amazon/product"
+                  href="/dashboard/amazon/products"
                 >
-                  Product
+                  Products
                 </SubMenuItem>
                 <SubMenuItem
                   collapsed={collapsed}

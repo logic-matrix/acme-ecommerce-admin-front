@@ -7,7 +7,6 @@ import {
   CustomTableHeader,
   CustomTableRow,
 } from "@/components/dashboard/CustomDataTable";
-import TotalStatCard from "@/components/dashboard/TotalStatCard";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Eye, Pencil, Trash2 } from "lucide-react";
@@ -89,18 +88,18 @@ const Page = () => {
   });
 
   // Calculate stats for each category and showing them in totalStatCard
-  const inStockCount = products.filter((p) => p.status === "in stock").length;
-  const lowStockCount = products.filter((p) => p.status === "low stock").length;
-  const outOfStockCount = products.filter(
-    (p) => p.status === "out of stock"
-  ).length;
+  // const inStockCount = products.filter((p) => p.status === "in stock").length;
+  // const lowStockCount = products.filter((p) => p.status === "low stock").length;
+  // const outOfStockCount = products.filter(
+  //   (p) => p.status === "out of stock"
+  // ).length;
 
   return (
     <div className="container">
       {/* product */}
       <div className="flex justify-between mb-4">
         <div className="flex flex-col">
-          <h1 className="font-semibold text-3xl">Product</h1>
+          <h1 className="font-semibold text-3xl">Amazon Product</h1>
           <p className="font-medium text-gray-500 text-base">
             Manage your product inventory
           </p>
@@ -111,7 +110,7 @@ const Page = () => {
       </div>
 
       {/* TotalStat */}
-      <div className="flex justify-between gap-2 mb-4">
+      {/* <div className="flex justify-between gap-2 mb-4">
         <TotalStatCard
           total={products.length}
           growthPercentage={1.3}
@@ -136,7 +135,7 @@ const Page = () => {
           icon="/outofstock.svg"
           title="out of stock"
         />
-      </div>
+      </div> */}
 
       {/* Table with Tabs */}
       <Tabs
