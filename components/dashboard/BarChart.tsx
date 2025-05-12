@@ -37,7 +37,7 @@ const CategoryDistributionChart: React.FC = () => {
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-sm">
+    <div className="p-6 bg-white rounded-lg shadow-sm border">
       <h2 className="text-2xl font-bold mb-6 text-gray-800">
         Category Distribution
       </h2>

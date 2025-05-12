@@ -10,90 +10,78 @@ import {
 } from "@/components/dashboard/CustomDataTable";
 import SalesChart from "@/components/dashboard/SalesChart";
 import TotalStatCard from "@/components/dashboard/TotalStatCard";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Eye, Pencil, Trash2 } from "lucide-react";
-import Link from "next/link";
+import { Eye, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 // Dummy product data
-const products = [
+const orders = [
   {
-    id: 1,
-    name: "Wireless Headphones",
-    category: "Electronics",
-    price: "$89.99",
-    stock: 120,
-    status: "in stock",
+    id: "ORD001",
+    customer: "John Doe",
+    admin: "Alice Smith",
+    date: "2025-05-10",
+    items: 3,
+    total: "$150.00",
+    status: "completed",
   },
   {
-    id: 2,
-    name: "Running Shoes",
-    category: "Sportswear",
-    price: "$59.49",
-    stock: 80,
-    status: "in stock",
+    id: "ORD002",
+    customer: "Jane Roe",
+    admin: "Bob Johnson",
+    date: "2025-05-09",
+    items: 1,
+    total: "$59.49",
+    status: "pending",
   },
   {
-    id: 3,
-    name: "Coffee Maker",
-    category: "Home Appliance",
-    price: "$35.00",
-    stock: 60,
-    status: "in stock",
+    id: "ORD003",
+    customer: "Alice Blue",
+    admin: "Carol White",
+    date: "2025-05-08",
+    items: 2,
+    total: "$89.99",
+    status: "processing",
   },
   {
-    id: 4,
-    name: "Smart Watch",
-    category: "Gadgets",
-    price: "$129.99",
-    stock: 30,
-    status: "low stock",
-  },
-  {
-    id: 5,
-    name: "Bluetooth Speaker",
-    category: "Audio",
-    price: "$45.25",
-    stock: 10,
-    status: "low stock",
-  },
-  {
-    id: 6,
-    name: "Wireless Earbuds",
-    category: "Audio",
-    price: "$45.25",
-    stock: 0,
-    status: "out of stock",
+    id: "ORD004",
+    customer: "Mark Green",
+    admin: "Dan Brown",
+    date: "2025-05-07",
+    items: 4,
+    total: "$200.00",
+    status: "cancel",
   },
 ];
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case "low stock":
+    case "completed":
+      return "bg-green-100 text-green-600";
+    case "processing":
+      return "bg-purple-100 text-purple-600";
+    case "pending":
       return "bg-orange-100 text-orange-500";
-    case "out of stock":
+    case "cancel":
       return "bg-red-100 text-red-500";
-    case "in stock":
-      return "bg-green-100 text-green-500";
     default:
       return "bg-gray-100 text-gray-800";
   }
 };
 
 const Page = () => {
-  const [activeTab, setActiveTab] = useState("all products");
+  const [activeTab, setActiveTab] = useState("all orders");
 
   // Filter products based on the active tab
-  const filteredProducts = products.filter((product) => {
-    if (activeTab === "all products") return true;
-    return product.status === activeTab;
+  const filteredOrders = orders.filter((order) => {
+    if (activeTab === "all orders") return true;
+    return order.status === activeTab;
   });
 
   // Calculate stats for each category and showing them in totalStatCard
-  const inStockCount = products.filter((p) => p.status === "in stock").length;
-  const lowStockCount = products.filter((p) => p.status === "low stock").length;
-  const outOfStockCount = products.filter(
+  const inStockCount = orders.filter((p) => p.status === "in stock").length;
+  const lowStockCount = orders.filter((p) => p.status === "low stock").length;
+  const outOfStockCount = orders.filter(
     (p) => p.status === "out of stock"
   ).length;
 
@@ -102,20 +90,17 @@ const Page = () => {
       {/* product */}
       <div className="flex justify-between mb-4">
         <div className="flex flex-col">
-          <h1 className="font-semibold text-3xl">Amazon</h1>
+          <h1 className="font-semibold text-3xl">Amazon Dashboard</h1>
           <p className="font-medium text-gray-500 text-base">
             Manage your product inventory
           </p>
         </div>
-        <Link href="/dashboard/products/create">
-          <Button>Add Product</Button>
-        </Link>
       </div>
 
       {/* TotalStat */}
       <div className="flex justify-between gap-2 mb-4">
         <TotalStatCard
-          total={products.length}
+          total={orders.length}
           growthPercentage={1.3}
           icon="/product.svg"
           title="total product"
@@ -140,7 +125,12 @@ const Page = () => {
         />
       </div>
 
-      {/* Table with Tabs */}
+      {/* chart */}
+      <div className="grid grid-cols-2 gap-2 mb-2">
+        <SalesChart />
+        <CategoryDistributionChart />
+      </div>
+      {/* Tabs */}
       <Tabs
         value={activeTab}
         onValueChange={setActiveTab}
@@ -148,75 +138,75 @@ const Page = () => {
       >
         <TabsList className="bg-gray-100">
           <TabsTrigger
-            value="all products"
+            value="all orders"
             className="data-[state=active]:bg-black data-[state=active]:text-white"
           >
-            All Products
+            All Orders
           </TabsTrigger>
           <TabsTrigger
-            value="in stock"
+            value="completed"
             className="data-[state=active]:bg-black data-[state=active]:text-white"
           >
-            In Stock
+            Completed
           </TabsTrigger>
           <TabsTrigger
-            value="low stock"
+            value="processing"
             className="data-[state=active]:bg-black data-[state=active]:text-white"
           >
-            Low Stock
+            Processing
           </TabsTrigger>
           <TabsTrigger
-            value="out of stock"
+            value="pending"
             className="data-[state=active]:bg-black data-[state=active]:text-white"
           >
-            Out of Stock
+            Pending
+          </TabsTrigger>
+          <TabsTrigger
+            value="cancel"
+            className="data-[state=active]:bg-black data-[state=active]:text-white"
+          >
+            Cancel
           </TabsTrigger>
         </TabsList>
       </Tabs>
 
-      {/* chart */}
-      <div className="grid grid-cols-2">
-        <SalesChart />
-        <CategoryDistributionChart />
-      </div>
       <CustomTable>
         <CustomTableHeader>
           <CustomTableRow>
-            <CustomTableHead>ID</CustomTableHead>
-            <CustomTableHead>Product Name</CustomTableHead>
-            <CustomTableHead>Category</CustomTableHead>
-            <CustomTableHead>Price</CustomTableHead>
-            <CustomTableHead>Stock</CustomTableHead>
+            <CustomTableHead>Order ID</CustomTableHead>
+            <CustomTableHead>Customer</CustomTableHead>
+            <CustomTableHead>Admin</CustomTableHead>
+            <CustomTableHead>Date</CustomTableHead>
+            <CustomTableHead>Items</CustomTableHead>
+            <CustomTableHead>Total</CustomTableHead>
             <CustomTableHead>Status</CustomTableHead>
             <CustomTableHead>Action</CustomTableHead>
           </CustomTableRow>
         </CustomTableHeader>
         <CustomTableBody>
-          {filteredProducts.map((product) => (
-            <CustomTableRow key={product.id} variant="striped">
-              <CustomTableCell>{product.id}</CustomTableCell>
-              <CustomTableCell>{product.name}</CustomTableCell>
-              <CustomTableCell>{product.category}</CustomTableCell>
-              <CustomTableCell>{product.price}</CustomTableCell>
-              <CustomTableCell>{product.stock}</CustomTableCell>
+          {filteredOrders.map((order) => (
+            <CustomTableRow key={order.id} variant="striped">
+              <CustomTableCell>{order.id}</CustomTableCell>
+              <CustomTableCell>{order.customer}</CustomTableCell>
+              <CustomTableCell>{order.admin}</CustomTableCell>
+              <CustomTableCell>{order.date}</CustomTableCell>
+              <CustomTableCell>{order.items}</CustomTableCell>
+              <CustomTableCell>{order.total}</CustomTableCell>
               <CustomTableCell className="capitalize">
                 <span
                   className={`${getStatusColor(
-                    product.status
+                    order.status
                   )} px-3 rounded-4xl py-1 font-semibold`}
                 >
-                  {product.status}
+                  {order.status}
                 </span>
               </CustomTableCell>
-              {/* Action Buttons */}
               <CustomTableCell>
-                <div className="flex justify-between">
+                <div className="flex justify-center gap-2">
                   <span className="cursor-pointer">
                     <Eye width={16} />
                   </span>
-                  <span className="cursor-pointer">
-                    <Pencil width={16} />
-                  </span>
+
                   <span className="cursor-pointer">
                     <Trash2 width={16} className="text-red-400" />
                   </span>
@@ -226,7 +216,8 @@ const Page = () => {
           ))}
         </CustomTableBody>
       </CustomTable>
-      {filteredProducts.length === 0 && (
+
+      {filteredOrders.length === 0 && (
         <div className="text-center py-8 text-gray-500">
           No products found for the selected filter.
         </div>
