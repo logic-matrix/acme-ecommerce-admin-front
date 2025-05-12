@@ -107,14 +107,13 @@ export default function SignInPage() {
               <div className="flex flex-col gap-1">
                 <Label htmlFor="email">Email</Label>
                 <div className="relative">
-                  {/* Email Icon */}
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black h-5 w-5" />
+                  {/* Email Icon
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black h-5 w-5" /> */}
                   <Input
                     id="email"
                     type="email"
                     placeholder="Value"
                     value={email}
-                    className="pl-10"
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
@@ -125,13 +124,12 @@ export default function SignInPage() {
                 <Label htmlFor="password">Password</Label>
                 <div className="relative">
                   {/* Email Icon */}
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black h-5 w-5" />
+                  {/* <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black h-5 w-5" /> */}
                   <Input
                     id="password"
                     type="text"
                     placeholder="Value"
                     value={password}
-                    className="pl-10"
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
@@ -158,7 +156,7 @@ export default function SignInPage() {
                 </Label>
               </div> */}
               <Link
-                href="/forget"
+                href="/forget-password"
                 className="text-sm font-bold text-black underline"
               >
                 Forgot password?
