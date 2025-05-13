@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import Navbar from "@/components/website/Navbar";
 import { useUserStore } from "../store/useUserStore";
 
 const Home = () => {
@@ -7,9 +7,7 @@ const Home = () => {
   console.log(user);
   return (
     <div>
-      <h1 className="text-center text-4xl mt-10">
-        ACME-Electronics User Panel
-      </h1>
+      <Navbar></Navbar>
     </div>
   );
 };
