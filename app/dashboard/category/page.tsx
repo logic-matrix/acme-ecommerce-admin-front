@@ -1,4 +1,5 @@
 "use client";
+import Loader from "@/components/common/loader";
 import {
   CustomTable,
   CustomTableBody,
@@ -8,6 +9,17 @@ import {
   CustomTableRow,
 } from "@/components/dashboard/CustomDataTable";
 import TotalStatCard from "@/components/dashboard/TotalStatCard";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -17,24 +29,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  AlertDialog,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogCancel,
-  AlertDialogAction,
-} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { Edit, Plus, Trash2 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast, Toaster } from "sonner";
-import Loader from "@/components/common/loader";
 
 const Categorypage = () => {
   interface Category {
@@ -233,7 +233,7 @@ const Categorypage = () => {
                     <CustomTableCell>
                       <span className="font-medium">{category.name}</span>
                     </CustomTableCell>
-                    <CustomTableCell className="text-muted-foreground">
+                    <CustomTableCell>
                       {new Date(category.createdAt).toLocaleDateString()}
                     </CustomTableCell>
                     <CustomTableCell>
@@ -246,7 +246,7 @@ const Categorypage = () => {
                               setEditCategoryName(category.name);
                             }}
                           >
-                            <Edit className="cursor-pointer" />
+                            <Edit size={16} className="cursor-pointer" />
                           </DialogTrigger>
                           <DialogContent>
                             <DialogHeader>
@@ -274,7 +274,10 @@ const Categorypage = () => {
                         {/* Delete */}
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
-                            <Trash2 className="text-red-500 cursor-pointer" />
+                            <Trash2
+                              size={16}
+                              className="text-red-500 cursor-pointer"
+                            />
                           </AlertDialogTrigger>
                           <AlertDialogContent>
                             <AlertDialogHeader>

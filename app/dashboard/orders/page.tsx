@@ -10,7 +10,7 @@ import {
 } from "@/components/dashboard/CustomDataTable";
 import TotalStatCard from "@/components/dashboard/TotalStatCard";
 import { Button } from "@/components/ui/button";
-import { Eye, Trash2, Anchor } from "lucide-react";
+import { Anchor, Eye, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -141,7 +141,7 @@ export default function OrdersPage() {
                   </span>
                 </CustomTableCell>
                 <CustomTableCell>
-                  <div className="flex gap-2">
+                  <div className="flex  justify-center gap-2">
                     <Link href={`/dashboard/orders/${order.id}`}>
                       <Eye className="w-4 h-4 text-gray-600 hover:text-blue-600 cursor-pointer" />
                     </Link>
