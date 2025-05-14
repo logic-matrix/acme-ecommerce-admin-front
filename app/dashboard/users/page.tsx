@@ -75,6 +75,40 @@ const UserPage = () => {
   });
 
 
+  const fetchUserStats = async () => {
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/statsofusers`,
+        {
+          credentials: 'include'
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch user statistics: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+
+      if (result.success) {
+        setUserStats({
+          allUsers: result.data.allUsers || 0,
+          active: result.data.active || 0,
+          inactive: result.data.inactive || 0
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching user statistics:', error);
+      // Set default values on error
+      setUserStats({
+        allUsers: 0,
+        active: 0,
+        inactive: 0
+      });
+    }
+  };
+
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -100,42 +134,8 @@ const UserPage = () => {
       }
     };
 
-    const fetchUserStats = async () => {
-
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/statsofusers`,
-          {
-            credentials: 'include'
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch user statistics: ${response.statusText}`);
-        }
-
-        const result = await response.json();
-
-        if (result.success) {
-          setUserStats({
-            allUsers: result.data.allUsers || 0,
-            active: result.data.active || 0,
-            inactive: result.data.inactive || 0
-          });
-        }
-      } catch (error) {
-        console.error('Error fetching user statistics:', error);
-        // Set default values on error
-        setUserStats({
-          allUsers: 0,
-          active: 0,
-          inactive: 0
-        });
-      }
-    };
-
-    fetchUsers();
     fetchUserStats();
+    fetchUsers();
   }, [page, limit]);
 
   const handleDeleteUser = async (userId: number, userRole: string) => {
