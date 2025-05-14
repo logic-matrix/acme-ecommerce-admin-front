@@ -9,62 +9,31 @@ import {
 } from "@/components/dashboard/CustomDataTable";
 import TotalStatCard from "@/components/dashboard/TotalStatCard";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-// Dummy product data
-const products = [
-  {
-    id: 1,
-    name: "Wireless Headphones",
-    category: "Electronics",
-    price: "$89.99",
-    stock: 120,
-    status: "in stock",
-  },
-  {
-    id: 2,
-    name: "Running Shoes",
-    category: "Sportswear",
-    price: "$59.49",
-    stock: 80,
-    status: "in stock",
-  },
-  {
-    id: 3,
-    name: "Coffee Maker",
-    category: "Home Appliance",
-    price: "$35.00",
-    stock: 60,
-    status: "in stock",
-  },
-  {
-    id: 4,
-    name: "Smart Watch",
-    category: "Gadgets",
-    price: "$129.99",
-    stock: 30,
-    status: "low stock",
-  },
-  {
-    id: 5,
-    name: "Bluetooth Speaker",
-    category: "Audio",
-    price: "$45.25",
-    stock: 10,
-    status: "low stock",
-  },
-  {
-    id: 6,
-    name: "Wireless Earbuds",
-    category: "Audio",
-    price: "$45.25",
-    stock: 0,
-    status: "out of stock",
-  },
-];
+// Define interfaces for the product and category
+interface Product {
+  id: number;
+  name: string;
+  price: string;
+  stock: number;
+  status: string;
+  images: string[];
+  description?: string | null;
+  categoryId: number;
+  category: Category;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface Category {
+  id: number;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -80,20 +49,47 @@ const getStatusColor = (status: string) => {
 };
 
 const Page = () => {
-  const [activeTab, setActiveTab] = useState("all products");
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Filter products based on the active tab
-  const filteredProducts = products.filter((product) => {
-    if (activeTab === "all products") return true;
-    return product.status === activeTab;
-  });
+  useEffect(() => {
+    // Fetch product data from the API
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/products`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch products");
+        }
+        const data = await response.json();
+        console.log(data);
+        setProducts(data.data);
+      } catch (err) {
+        setError("Error fetching product data.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // Calculate stats for each category and showing them in totalStatCard
+    fetchProducts();
+  }, []);
+
+  // Calculate stats for each category and show them in totalStatCard
   const inStockCount = products.filter((p) => p.status === "in stock").length;
   const lowStockCount = products.filter((p) => p.status === "low stock").length;
   const outOfStockCount = products.filter(
     (p) => p.status === "out of stock"
   ).length;
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div className="container">
@@ -138,40 +134,7 @@ const Page = () => {
         />
       </div>
 
-      {/* Table with Tabs */}
-      <Tabs
-        value={activeTab}
-        onValueChange={setActiveTab}
-        className="w-full mb-4"
-      >
-        <TabsList className="bg-gray-100">
-          <TabsTrigger
-            value="all products"
-            className="data-[state=active]:bg-black data-[state=active]:text-white"
-          >
-            All Products
-          </TabsTrigger>
-          <TabsTrigger
-            value="in stock"
-            className="data-[state=active]:bg-black data-[state=active]:text-white"
-          >
-            In Stock
-          </TabsTrigger>
-          <TabsTrigger
-            value="low stock"
-            className="data-[state=active]:bg-black data-[state=active]:text-white"
-          >
-            Low Stock
-          </TabsTrigger>
-          <TabsTrigger
-            value="out of stock"
-            className="data-[state=active]:bg-black data-[state=active]:text-white"
-          >
-            Out of Stock
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
-
+      {/* Table without tabs */}
       <CustomTable>
         <CustomTableHeader>
           <CustomTableRow>
@@ -180,19 +143,19 @@ const Page = () => {
             <CustomTableHead>Category</CustomTableHead>
             <CustomTableHead>Price</CustomTableHead>
             <CustomTableHead>Stock</CustomTableHead>
-            <CustomTableHead>Status</CustomTableHead>
+            {/* <CustomTableHead>Status</CustomTableHead> */}
             <CustomTableHead>Action</CustomTableHead>
           </CustomTableRow>
         </CustomTableHeader>
         <CustomTableBody>
-          {filteredProducts.map((product) => (
+          {products.map((product) => (
             <CustomTableRow key={product.id} variant="striped">
               <CustomTableCell>{product.id}</CustomTableCell>
               <CustomTableCell>{product.name}</CustomTableCell>
-              <CustomTableCell>{product.category}</CustomTableCell>
+              <CustomTableCell>{product.category.name}</CustomTableCell>
               <CustomTableCell>{product.price}</CustomTableCell>
               <CustomTableCell>{product.stock}</CustomTableCell>
-              <CustomTableCell className="capitalize">
+              {/* <CustomTableCell className="capitalize">
                 <span
                   className={`${getStatusColor(
                     product.status
@@ -200,7 +163,7 @@ const Page = () => {
                 >
                   {product.status}
                 </span>
-              </CustomTableCell>
+              </CustomTableCell> */}
               {/* Action Buttons */}
               <CustomTableCell>
                 <div className="flex justify-between">
@@ -219,10 +182,8 @@ const Page = () => {
           ))}
         </CustomTableBody>
       </CustomTable>
-      {filteredProducts.length === 0 && (
-        <div className="text-center py-8 text-gray-500">
-          No products found for the selected filter.
-        </div>
+      {products.length === 0 && (
+        <div className="text-center py-8 text-gray-500">No products found.</div>
       )}
     </div>
   );
