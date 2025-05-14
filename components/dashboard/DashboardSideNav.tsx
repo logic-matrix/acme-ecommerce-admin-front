@@ -336,7 +336,7 @@ const DashboardSideNav = ({
             icon={<Settings />}
             collapsed={collapsed}
             active={isActive("/settings")}
-            href="/settings"
+            href="/dashboard/settings"
           >
             Settings
           </NavItem>
