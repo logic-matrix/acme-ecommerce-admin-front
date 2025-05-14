@@ -29,12 +29,9 @@ export async function middleware(request: NextRequest) {
     },
   });
 
-  if (!res.ok) {
-    return NextResponse.redirect(new URL("/sign-in", request.url));
-  }
+  const user = await res.json();
 
-  const { user } = await res.json();
-  const isAdmin = user.role === "admin";
+  const isAdmin = user?.role === "admin";
 
   if (isAuthRoute) {
     return NextResponse.redirect(new URL("/", request.url));
