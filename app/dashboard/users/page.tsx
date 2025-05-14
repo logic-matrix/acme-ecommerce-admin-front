@@ -41,15 +41,21 @@ interface PaginatedResponse {
   data: User[];
 }
 
+interface UserStats {
+  allUsers: number;
+  active: number;
+  inactive: number;
+}
+
 const UserPage = () => {
   const [selectedTab, setSelectedTab] = useState("All Users");
   const [users, setUsers] = useState<User[]>([]);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
-  const [userStats, setUserStats] = useState({
-    total: 0,
+  const [userStats, setUserStats] = useState<UserStats>({
+    allUsers: 0,
     active: 0,
-    inactive: 0,
+    inactive: 0
   });
 
   const [deleteDialogState, setDeleteDialogState] = useState<{
@@ -67,6 +73,8 @@ const UserPage = () => {
   }>({
     isOpen: false
   });
+
+
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -86,18 +94,48 @@ const UserPage = () => {
         }
 
         setUsers(result.data);
-        setUserStats({
-          total: result.data.length,
-          active: result.data.filter((user: User) => user.verified).length,
-          inactive: result.data.filter((user: User) => !user.verified).length,
-        });
       } catch (error) {
         console.error('Error fetching users:', error);
         setUsers([]);
       }
     };
 
+    const fetchUserStats = async () => {
+
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/statsofusers`,
+          {
+            credentials: 'include'
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch user statistics: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+          setUserStats({
+            allUsers: result.data.allUsers || 0,
+            active: result.data.active || 0,
+            inactive: result.data.inactive || 0
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching user statistics:', error);
+        // Set default values on error
+        setUserStats({
+          allUsers: 0,
+          active: 0,
+          inactive: 0
+        });
+      }
+    };
+
     fetchUsers();
+    fetchUserStats();
   }, [page, limit]);
 
   const handleDeleteUser = async (userId: number, userRole: string) => {
@@ -119,7 +157,7 @@ const UserPage = () => {
       setUsers(users.filter(user => user.id !== userId));
       setUserStats(prev => ({
         ...prev,
-        total: prev.total - 1,
+        allUsers: prev.allUsers - 1,
         active: users.find(u => u.id === userId)?.verified
           ? prev.active - 1
           : prev.active,
@@ -151,7 +189,7 @@ const UserPage = () => {
 
       <div className="flex gap-5 mb-6">
         <TotalStatCard
-          total={userStats.total}
+          total={userStats.allUsers}
           growthPercentage={1.3}
           icon="/user.svg"
           title="total users"
