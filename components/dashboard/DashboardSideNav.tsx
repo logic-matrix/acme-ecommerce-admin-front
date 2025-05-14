@@ -2,20 +2,19 @@
 
 import { handleLogout } from "@/lib/logout";
 import {
-  LayoutDashboard,
-  ShoppingCart,
-  Users,
-  Package,
-  Settings,
-  LogOut,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Zap,
-  Icon,
-  ChevronDown,
   ChevronUp,
-  ListOrdered,
   CreditCard,
+  Icon,
+  LayoutDashboard,
+  ListOrdered,
+  LogOut,
+  Package,
+  Settings,
+  Users,
+  Zap,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -183,7 +182,7 @@ const DashboardSideNav = ({
           </NavItem>
 
           {/* Products Submenu */}
-          <div>
+          {/* <div>
             <NavItem
               icon={<ShoppingCart />}
               collapsed={collapsed}
@@ -211,7 +210,7 @@ const DashboardSideNav = ({
                 </SubMenuItem>
               </div>
             )}
-          </div>
+          </div> */}
 
           <NavItem
             icon={<BiCategory />}
@@ -248,14 +247,55 @@ const DashboardSideNav = ({
               Integrations
             </p>
           )}
-          <NavItem
+          {/* <NavItem
             icon={<SiAmazon />}
             collapsed={collapsed}
             active={isActive("/integrations/amazon")}
-            href="/integrations/amazon"
+            href="/dashboard/amazon"
           >
             Amazon
-          </NavItem>
+          </NavItem> */}
+
+          {/* Products Submenu */}
+          <div>
+            <NavItem
+              icon={<SiAmazon />}
+              collapsed={collapsed}
+              hasSubmenu
+              isSubmenuOpen={openSubmenu === "amazon"}
+              onClick={() => toggleSubmenu("amazon")}
+              active={
+                isActive("/dashboard/amazon/dashboard") ||
+                isActive("/dashboard/amazon/products") ||
+                isActive("/dashboard/amazon/refund")
+              }
+            >
+              Amazon
+            </NavItem>
+            {openSubmenu === "amazon" && !collapsed && (
+              <div className="space-y-1">
+                <SubMenuItem
+                  collapsed={collapsed}
+                  href="/dashboard/amazon/dashboard"
+                >
+                  Dashboard
+                </SubMenuItem>
+                <SubMenuItem
+                  collapsed={collapsed}
+                  href="/dashboard/amazon/products"
+                >
+                  Products
+                </SubMenuItem>
+                <SubMenuItem
+                  collapsed={collapsed}
+                  href="/dashboard/amazon/refund"
+                >
+                  Refund
+                </SubMenuItem>
+              </div>
+            )}
+          </div>
+
           <NavItem
             icon={<SiShopify />}
             collapsed={collapsed}
