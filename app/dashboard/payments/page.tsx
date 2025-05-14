@@ -8,7 +8,6 @@ import {
   CustomTableRow,
 } from "@/components/dashboard/CustomDataTable";
 import TotalStatCard from "@/components/dashboard/TotalStatCard";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -28,7 +27,6 @@ import {
   Phone,
   User,
 } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 
 // Dummy product data
@@ -120,9 +118,6 @@ const Page = () => {
             Manage your payment transactions
           </p>
         </div>
-        <Link href="/dashboard/products/create">
-          <Button>Add Product</Button>
-        </Link>
       </div>
 
       {/* TotalStat */}

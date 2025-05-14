@@ -247,16 +247,7 @@ const DashboardSideNav = ({
               Integrations
             </p>
           )}
-          {/* <NavItem
-            icon={<SiAmazon />}
-            collapsed={collapsed}
-            active={isActive("/integrations/amazon")}
-            href="/dashboard/amazon"
-          >
-            Amazon
-          </NavItem> */}
-
-          {/* Products Submenu */}
+          {/* Amazon */}
           <div>
             <NavItem
               icon={<SiAmazon />}
@@ -296,14 +287,45 @@ const DashboardSideNav = ({
             )}
           </div>
 
-          <NavItem
-            icon={<SiShopify />}
-            collapsed={collapsed}
-            active={isActive("/integrations/shopify")}
-            href="/integrations/shopify"
-          >
-            Shopify
-          </NavItem>
+          {/* Shopify */}
+          <div>
+            <NavItem
+              icon={<SiShopify />}
+              collapsed={collapsed}
+              hasSubmenu
+              isSubmenuOpen={openSubmenu === "shopify"}
+              onClick={() => toggleSubmenu("shopify")}
+              active={
+                isActive("/dashboard/shopify/dashboard") ||
+                isActive("/dashboard/shopify/products") ||
+                isActive("/dashboard/shopify/refund")
+              }
+            >
+              Shopify
+            </NavItem>
+            {openSubmenu === "shopify" && !collapsed && (
+              <div className="space-y-1">
+                <SubMenuItem
+                  collapsed={collapsed}
+                  href="/dashboard/shopify/dashboard"
+                >
+                  Dashboard
+                </SubMenuItem>
+                <SubMenuItem
+                  collapsed={collapsed}
+                  href="/dashboard/shopify/products"
+                >
+                  Products
+                </SubMenuItem>
+                <SubMenuItem
+                  collapsed={collapsed}
+                  href="/dashboard/shopify/refund"
+                >
+                  Refund
+                </SubMenuItem>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="border-t border-gray-200 mx-3 my-2"></div>
