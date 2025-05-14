@@ -1,5 +1,10 @@
 "use client";
-import React from "react";
+import BestSellers from "@/components/website/BestSeller";
+import CuratedElectronic from "@/components/website/CuratedElectronic";
+import HeroSection from "@/components/website/HeroSection";
+import Navbar from "@/components/website/Navbar";
+import ShippingBenefits from "@/components/website/ShippingBenefits";
+import ShopByCategory from "@/components/website/ShopByCategory";
 import { useUserStore } from "../store/useUserStore";
 
 const Home = () => {
@@ -7,9 +12,12 @@ const Home = () => {
   console.log(user);
   return (
     <div>
-      <h1 className="text-center text-4xl mt-10">
-        ACME-Electronics User Panel
-      </h1>
+      <Navbar></Navbar>
+      <HeroSection></HeroSection>
+      <ShippingBenefits></ShippingBenefits>
+      <CuratedElectronic></CuratedElectronic>
+      <BestSellers></BestSellers>
+      <ShopByCategory></ShopByCategory>
     </div>
   );
 };
