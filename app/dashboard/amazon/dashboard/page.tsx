@@ -11,7 +11,6 @@ import {
 import SalesChart from "@/components/dashboard/SalesChart";
 import TotalStatCard from "@/components/dashboard/TotalStatCard";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Eye, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 // Dummy product data
@@ -180,7 +179,7 @@ const Page = () => {
             <CustomTableHead>Items</CustomTableHead>
             <CustomTableHead>Total</CustomTableHead>
             <CustomTableHead>Status</CustomTableHead>
-            <CustomTableHead>Action</CustomTableHead>
+            {/* <CustomTableHead>Action</CustomTableHead> */}
           </CustomTableRow>
         </CustomTableHeader>
         <CustomTableBody>
@@ -201,7 +200,7 @@ const Page = () => {
                   {order.status}
                 </span>
               </CustomTableCell>
-              <CustomTableCell>
+              {/* <CustomTableCell>
                 <div className="flex justify-center gap-2">
                   <span className="cursor-pointer">
                     <Eye width={16} />
@@ -211,7 +210,7 @@ const Page = () => {
                     <Trash2 width={16} className="text-red-400" />
                   </span>
                 </div>
-              </CustomTableCell>
+              </CustomTableCell> */}
             </CustomTableRow>
           ))}
         </CustomTableBody>
