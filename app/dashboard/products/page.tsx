@@ -1,4 +1,5 @@
 "use client";
+import Loader from "@/components/common/loader";
 import {
   CustomTable,
   CustomTableBody,
@@ -84,7 +85,11 @@ const Page = () => {
   ).length;
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-[70vh]">
+        <Loader />
+      </div>
+    );
   }
 
   if (error) {
