@@ -15,7 +15,6 @@ interface User {
     name: string | null;
     email: string;
     role: string;
-    verified: boolean;
 }
 
 interface EditUserDialogProps {
@@ -30,10 +29,8 @@ export const EditUserDialog = ({ user, isOpen, onClose, onSuccess }: EditUserDia
         name: "",
         email: "",
         role: "user",
-        verified: false,
         password: ""
     });
-    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (user) {
@@ -41,51 +38,34 @@ export const EditUserDialog = ({ user, isOpen, onClose, onSuccess }: EditUserDia
                 name: user.name || "",
                 email: user.email,
                 role: user.role,
-                verified: user.verified,
                 password: ""
             });
         }
     }, [user]);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!user) return;
 
-        setLoading(true);
-        try {
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/${user.id}`,
-                {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    credentials: 'include',
-                    body: JSON.stringify({
-                        ...formData,
-                        password: formData.password || undefined
-                    })
-                }
-            );
-
-            const result = await response.json();
-
-            if (!response.ok) {
-                throw new Error(result.error || 'Failed to update user');
-            }
-
-            toast.success("User updated successfully");
-            onSuccess();
-            onClose();
-        } catch (error) {
-            toast.error(error instanceof Error ? error.message : "Failed to update user");
-        } finally {
-            setLoading(false);
-        }
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/${user.id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ ...formData, password: formData.password || undefined }),
+        })
+            .then((res) => {
+                if (!res.ok) throw new Error("Failed to update user");
+                return res.json();
+            })
+            .then(() => {
+                toast.success("User updated successfully");
+                onSuccess();
+                onClose();
+            })
+            .catch(() => toast.error("Failed to update user"));
     };
 
-    // Don't render the dialog if there's no user
-    if (!user) return null;
+    if (!isOpen || !user) return null;
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
@@ -137,18 +117,6 @@ export const EditUserDialog = ({ user, isOpen, onClose, onSuccess }: EditUserDia
                                 />
                             </div>
 
-                            <div className="flex items-center gap-2">
-                                <input
-                                    type="checkbox"
-                                    checked={formData.verified}
-                                    onChange={(e) => setFormData(prev => ({ ...prev, verified: e.target.checked }))}
-                                    id="verified"
-                                />
-                                <label htmlFor="verified" className="text-sm font-medium">
-                                    Verified User
-                                </label>
-                            </div>
-
                             <div className="flex justify-end gap-2 pt-4">
                                 <button
                                     type="button"
@@ -159,10 +127,9 @@ export const EditUserDialog = ({ user, isOpen, onClose, onSuccess }: EditUserDia
                                 </button>
                                 <button
                                     type="submit"
-                                    disabled={loading}
-                                    className="px-4 py-2 rounded bg-black text-white hover:bg-gray-800 disabled:bg-gray-400"
+                                    className="px-4 py-2 rounded bg-black text-white hover:bg-gray-800"
                                 >
-                                    {loading ? "Updating..." : "Update User"}
+                                    Update User
                                 </button>
                             </div>
                         </form>

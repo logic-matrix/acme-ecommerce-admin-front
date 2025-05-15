@@ -29,13 +29,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import ContactInfoLine from "@/components/dashboard/ContactInfoLine";
+import { EditUserDialog } from "@/components/dashboard/users/EditUserDialog";
+import { toast } from "sonner";
 
 interface User {
   id: number;
   name?: string | null;
   email: string;
   role: string;
-  verified: boolean;
   updatedAt: string;
 }
 
@@ -43,6 +44,10 @@ const UserPage = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
+
+  // Edit dialog state
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editUser, setEditUser] = useState<User | undefined>(undefined);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -60,6 +65,35 @@ const UserPage = () => {
     };
     fetchUsers();
   }, [page, limit]);
+
+  // Fetch user by ID for editing
+  const handleEditClick = async (userId: number) => {
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/${userId}`,
+        { withCredentials: true }
+      );
+      setEditUser(res.data.data);
+      setEditDialogOpen(true);
+    } catch (err) {
+      toast.error("Failed to fetch user details");
+    }
+  };
+
+  // After successful edit, refresh users
+  const handleEditSuccess = async () => {
+    setEditDialogOpen(false);
+    setEditUser(undefined);
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users?page=${page}&limit=${limit}`,
+        { withCredentials: true }
+      );
+      setUsers(res.data.data || []);
+    } catch (err) {
+      // Optionally handle error
+    }
+  };
 
   return (
     <div>
@@ -132,15 +166,18 @@ const UserPage = () => {
                               <ContactInfoLine icon={Mail} label="Email" value={user.email} />
                               <ContactInfoLine icon={CalendarDays} label="Last Updated" value={new Date(user.updatedAt).toLocaleString()} />
                               <ContactInfoLine icon={Pencil} label="Role" value={user.role} />
-                              <ContactInfoLine icon={Eye} label="Verified" value={user.verified ? "Yes" : "No"} />
+
                             </div>
                           </DialogDescription>
                         </DialogHeader>
                       </DialogContent>
                     </Dialog>
-                    <Link href={`/dashboard/users/${user.id}`} title="Edit">
+                    <button
+                      title="Edit"
+                      onClick={() => handleEditClick(user.id)}
+                    >
                       <Pencil className="w-4 h-4 cursor-pointer" />
-                    </Link>
+                    </button>
                     <button title="Delete">
                       <Trash2 className="w-4 h-4 text-red-500 cursor-pointer" />
                     </button>
@@ -174,6 +211,13 @@ const UserPage = () => {
           </button>
         </div>
       </div>
+      {/* Edit User Dialog */}
+      <EditUserDialog
+        isOpen={editDialogOpen}
+        user={editUser}
+        onClose={() => setEditDialogOpen(false)}
+        onSuccess={handleEditSuccess}
+      />
     </div>
   );
 };
