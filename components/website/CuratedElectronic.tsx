@@ -10,7 +10,7 @@ const productData = [
     id: 1,
     title: "Lightweight luxury earphones",
     description: "Lorem ipsum dolor sit amet consectetur.",
-    image: "/website/headphone-1.jpg",
+    image: "/website/headphone-2.jpg",
     link: "/products/earphones",
   },
   {
@@ -24,7 +24,7 @@ const productData = [
     id: 3,
     title: "Discover exclusive collaborations",
     description: "Lorem ipsum dolor sit amet consectetur.",
-    image: "/website/headphone-3.png",
+    image: "/website/headphone-2.jpg",
     link: "/collections/exclusive",
   },
 ];
