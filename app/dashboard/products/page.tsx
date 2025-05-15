@@ -36,18 +36,18 @@ interface Category {
   updatedAt: string;
 }
 
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case "low stock":
-      return "bg-orange-100 text-orange-500";
-    case "out of stock":
-      return "bg-red-100 text-red-500";
-    case "in stock":
-      return "bg-green-100 text-green-500";
-    default:
-      return "bg-gray-100 text-gray-800";
-  }
-};
+// const getStatusColor = (status: string) => {
+//   switch (status) {
+//     case "low stock":
+//       return "bg-orange-100 text-orange-500";
+//     case "out of stock":
+//       return "bg-red-100 text-red-500";
+//     case "in stock":
+//       return "bg-green-100 text-green-500";
+//     default:
+//       return "bg-gray-100 text-gray-800";
+//   }
+// };
 
 const Page = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -67,7 +67,7 @@ const Page = () => {
         const data = await response.json();
         console.log(data);
         setProducts(data.data);
-      } catch (err) {
+      } catch {
         setError("Error fetching product data.");
       } finally {
         setLoading(false);
