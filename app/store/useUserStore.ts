@@ -9,6 +9,8 @@ export type User = {
   otpExpiresAt?: string | null; // DateTime comes as string in JSON
   verified: boolean;
   role: string;
+  status: string;
+  image?: string | null;
   createdAt: string; // ISO string when fetched from API
   updatedAt: string;
 };
