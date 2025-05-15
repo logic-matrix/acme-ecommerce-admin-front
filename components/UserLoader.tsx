@@ -10,11 +10,11 @@ export const UserLoader = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get<{ user: User }>("/api/proxy/profile", {
+        const res = await axios.get<User>("/api/proxy/profile", {
           withCredentials: true,
         });
-
-        setUser(res.data.user);
+        const user = res.data;
+        setUser(user);
       } catch (error) {
         console.error("Error fetching user:", error);
       }
