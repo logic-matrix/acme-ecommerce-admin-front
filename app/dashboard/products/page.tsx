@@ -69,6 +69,7 @@ const Page = () => {
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/products`
       );
       setProducts(response.data.data);
+      // console.log(response.data.data);
     } catch {
       setError("Error fetching product data.");
     } finally {
@@ -83,7 +84,7 @@ const Page = () => {
         { withCredentials: true }
       );
       setSelectedProduct(response.data.data);
-      console.log(response.data.data);
+      // console.log(response.data.data);
       setShowViewDialog(true);
     } catch {
       alert("Error fetching product details.");
@@ -252,8 +253,7 @@ const Page = () => {
                   </p>
                   <p>
                     <strong>Status:</strong>{" "}
-                    {selectedProduct?.status === "active" ||
-                    selectedProduct?.status === "in stock" ? (
+                    {selectedProduct?.status ? (
                       <span className="text-green-500">Active</span>
                     ) : (
                       <span className="text-red-500">Inactive</span>

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import TotalStatCard from "@/components/dashboard/TotalStatCard";
 import { CalendarDays, Eye, Mail, Pencil, Trash2 } from "lucide-react";
 import {
@@ -12,7 +13,6 @@ import {
   CustomTableRow,
 } from "@/components/dashboard/CustomDataTable";
 import Image from "next/image";
-import Link from "next/link";
 import {
   Dialog,
   DialogContent,
@@ -24,14 +24,16 @@ import {
 } from "@/components/ui/dialog";
 import { EditUserDialog } from "@/components/dashboard/users/EditUserDialog";
 import ContactInfoLine from "@/components/dashboard/ContactInfoLine";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 
 interface User {
   id: number;
   name: string | null;
   email: string;
   verified: boolean;
-  role: string;
+  image?: string | null;
+  status: "active" | "inactive" | "suspended";
+  role: "user" | "admin";
   createdAt: string;
   updatedAt: string;
 }
@@ -41,7 +43,7 @@ interface PaginatedResponse {
   data: User[];
 }
 
-const UserPage = () => {
+const UserPage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("All Users");
   const [users, setUsers] = useState<User[]>([]);
   const [page, setPage] = useState(1);
@@ -57,42 +59,37 @@ const UserPage = () => {
     userId?: number;
     userRole?: string;
     userName?: string;
-  }>({
-    isOpen: false
-  });
+  }>({ isOpen: false });
 
   const [editDialogState, setEditDialogState] = useState<{
     isOpen: boolean;
     user?: User;
-  }>({
-    isOpen: false
-  });
+  }>({ isOpen: false });
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users?page=${page}&limit=${limit}`,
+        const { data } = await axios.get<PaginatedResponse>(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users`,
           {
-            credentials: 'include'
+            params: { page, limit },
+            withCredentials: true,
           }
         );
 
-        if (!response.ok) throw new Error('Failed to fetch users');
-        const result: PaginatedResponse = await response.json();
-
-        if (!result.data || !Array.isArray(result.data)) {
-          throw new Error('Invalid data format');
+        if (!data?.data || !Array.isArray(data.data)) {
+          throw new Error("Invalid data format");
         }
 
-        setUsers(result.data);
+        setUsers(data.data);
         setUserStats({
-          total: result.data.length,
-          active: result.data.filter((user: User) => user.verified).length,
-          inactive: result.data.filter((user: User) => !user.verified).length,
+          total: data.data.length,
+          active: data.data.filter((user) => user.verified).length,
+          inactive: data.data.filter((user) => !user.verified).length,
         });
       } catch (error) {
-        console.error('Error fetching users:', error);
+        console.error("Error fetching users:", error);
+        toast.error("Failed to fetch users");
         setUsers([]);
       }
     };
@@ -100,48 +97,45 @@ const UserPage = () => {
     fetchUsers();
   }, [page, limit]);
 
-  const handleDeleteUser = async (userId: number, userRole: string) => {
+  const handleDeleteUser = async (userId: number) => {
     try {
-      const response = await fetch(
+      const userToDelete = users.find((u) => u.id === userId);
+      if (!userToDelete) return;
+
+      await axios.delete(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/${userId}`,
         {
-          method: 'DELETE',
-          credentials: 'include',
+          withCredentials: true,
         }
       );
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || 'Failed to delete user');
-      }
-
-      setUsers(users.filter(user => user.id !== userId));
-      setUserStats(prev => ({
+      setUsers(users.filter((user) => user.id !== userId));
+      setUserStats((prev) => ({
         ...prev,
         total: prev.total - 1,
-        active: users.find(u => u.id === userId)?.verified
-          ? prev.active - 1
-          : prev.active,
-        inactive: users.find(u => u.id === userId)?.verified
-          ? prev.inactive
-          : prev.inactive - 1,
+        active: userToDelete.verified ? prev.active - 1 : prev.active,
+        inactive: !userToDelete.verified ? prev.inactive - 1 : prev.inactive,
       }));
-      toast.success(`User deleted successfully`);
+
+      toast.success("User deleted successfully");
       setDeleteDialogState({ isOpen: false });
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to delete user");
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.error || "Failed to delete user");
+      } else {
+        toast.error("Failed to delete user");
+      }
     }
   };
 
-  const filteredUsers = selectedTab === "All Users"
-    ? users
-    : users.filter((user) => user.verified === (selectedTab === "Active"));
-
+  const filteredUsers =
+    selectedTab === "All Users"
+      ? users
+      : users.filter((user) => user.verified === (selectedTab === "Active"));
 
   return (
     <div>
-      {/* <Toaster position="top-center" /> */}
+      {/* Header */}
       <div className="pb-6">
         <h1 className="font-semibold text-3xl">Users</h1>
         <p className="font-medium text-gray-500 text-base">
@@ -149,6 +143,7 @@ const UserPage = () => {
         </p>
       </div>
 
+      {/* Stats Cards */}
       <div className="flex gap-5 mb-6">
         <TotalStatCard
           total={userStats.total}
@@ -170,14 +165,16 @@ const UserPage = () => {
         />
       </div>
 
+      {/* Tabs */}
       <div className="flex gap-3 mb-6">
         {["All Users", "Active", "Inactive"].map((tab) => (
           <button
             key={tab}
-            className={`px-4 py-1 rounded-full font-medium text-sm border cursor-pointer ${selectedTab === tab
-              ? "bg-black text-white"
-              : "bg-gray-100 text-gray-800"
-              }`}
+            className={`px-4 py-1 rounded-full font-medium text-sm border cursor-pointer ${
+              selectedTab === tab
+                ? "bg-black text-white"
+                : "bg-gray-100 text-gray-800"
+            }`}
             onClick={() => setSelectedTab(tab)}
           >
             {tab}
@@ -185,6 +182,7 @@ const UserPage = () => {
         ))}
       </div>
 
+      {/* Table */}
       <CustomTable>
         <CustomTableHeader>
           <CustomTableRow>
@@ -196,7 +194,7 @@ const UserPage = () => {
           </CustomTableRow>
         </CustomTableHeader>
         <CustomTableBody>
-          {Array.isArray(filteredUsers) && filteredUsers.map((user) => (
+          {filteredUsers.map((user) => (
             <CustomTableRow key={user.id} variant="striped">
               <CustomTableCell>
                 <div className="flex items-center gap-2">
@@ -207,7 +205,9 @@ const UserPage = () => {
                     width={32}
                     height={32}
                   />
-                  <span className="font-medium">{user.name || "Unnamed User"}</span>
+                  <span className="font-medium">
+                    {user.name || "Unnamed User"}
+                  </span>
                 </div>
               </CustomTableCell>
               <CustomTableCell>{user.role}</CustomTableCell>
@@ -215,11 +215,14 @@ const UserPage = () => {
                 {new Date(user.updatedAt).toLocaleString()}
               </CustomTableCell>
               <CustomTableCell>
-                <span className={`text-xs px-3 py-1 rounded-full font-semibold ${user.verified
-                  ? "bg-green-100 text-green-700"
-                  : "bg-gray-200 text-gray-600"
-                  }`}>
-                  {user.verified ? "Active" : "Inactive"}
+                <span
+                  className={`text-xs px-3 py-1 rounded-full font-semibold ${
+                    user.status === "active"
+                      ? "bg-green-100 text-green-700"
+                      : "bg-gray-200 text-gray-600"
+                  }`}
+                >
+                  {user.status}
                 </span>
               </CustomTableCell>
               <CustomTableCell>
@@ -232,7 +235,9 @@ const UserPage = () => {
                       <DialogHeader>
                         <DialogTitle>
                           <div>
-                            <h2 className="font-semibold text-3xl">User Details</h2>
+                            <h2 className="font-semibold text-3xl">
+                              User Details
+                            </h2>
                             <p className="text-sm text-gray-500">
                               Detailed information about the selected user
                             </p>
@@ -253,26 +258,37 @@ const UserPage = () => {
                                   <h3 className="font-bold text-lg text-black">
                                     {user.name || "Unnamed User"}
                                   </h3>
-                                  <p className="text-sm text-gray-500">#{user.role}</p>
+                                  <p className="text-sm text-gray-500">
+                                    #{user.role}
+                                  </p>
                                 </div>
-                                <p className={`text-xs inline-block px-3 rounded-[2px] ${user.verified
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-red-200 text-red-600"
-                                  }`}>
-                                  {user.verified ? "Active" : "Inactive"}
+                                <p
+                                  className={`text-xs inline-block px-3 rounded-[2px] ${
+                                    user.status === "active"
+                                      ? "bg-green-100 text-green-800"
+                                      : "bg-red-200 text-red-600"
+                                  }`}
+                                >
+                                  {user.status}
                                 </p>
                               </div>
                             </div>
                             <div className="bg-[#F9FBFC] p-4 rounded-md">
-                              <h3 className="font-semibold text-lg">Contact Information</h3>
-                              <div>
-                                <ContactInfoLine icon={Mail} label="Email" value={user.email} />
-                                <ContactInfoLine
-                                  icon={CalendarDays}
-                                  label="Joined"
-                                  value={new Date(user.createdAt).toLocaleDateString()}
-                                />
-                              </div>
+                              <h3 className="font-semibold text-lg">
+                                Contact Information
+                              </h3>
+                              <ContactInfoLine
+                                icon={Mail}
+                                label="Email"
+                                value={user.email}
+                              />
+                              <ContactInfoLine
+                                icon={CalendarDays}
+                                label="Joined"
+                                value={new Date(
+                                  user.createdAt
+                                ).toLocaleDateString()}
+                              />
                             </div>
                           </div>
                         </DialogDescription>
@@ -282,24 +298,28 @@ const UserPage = () => {
 
                   <button
                     title="Edit"
-                    onClick={() => setEditDialogState({
-                      isOpen: true,
-                      user: user
-                    })}
-                    className="cursor-pointer"
+                    onClick={() => setEditDialogState({ isOpen: true, user })}
                   >
                     <Pencil className="w-4 h-4" />
                   </button>
+
                   <button
                     title="Delete"
-                    onClick={() => setDeleteDialogState({
-                      isOpen: true,
-                      userId: user.id,
-                      userRole: user.role,
-                      userName: user.name || "Unnamed User"
-                    })}
+                    disabled={user.role === "admin"}
+                    onClick={() =>
+                      setDeleteDialogState({
+                        isOpen: true,
+                        userId: user.id,
+                        userRole: user.role,
+                        userName: user.name || "Unnamed User",
+                      })
+                    }
                   >
-                    <Trash2 className="w-4 h-4 text-red-500 cursor-pointer" />
+                    <Trash2
+                      className={`w-4 h-4 text-red-500 ${
+                        user.role === "admin" ? "opacity-50" : "cursor-pointer"
+                      }`}
+                    />
                   </button>
                 </div>
               </CustomTableCell>
@@ -308,82 +328,86 @@ const UserPage = () => {
         </CustomTableBody>
       </CustomTable>
 
+      {/* Pagination */}
       <div className="flex justify-end gap-2 mt-4">
         <button
-          onClick={() => setPage(prev => Math.max(1, prev - 1))}
+          onClick={() => setPage((prev) => Math.max(1, prev - 1))}
           disabled={page === 1}
-          className={`px-4 py-2 rounded ${page === 1 ? 'bg-gray-200 text-gray-500' : 'bg-black text-white hover:bg-gray-800'
-            }`}>
+          className={`px-4 py-2 rounded ${
+            page === 1
+              ? "bg-gray-200 text-gray-500"
+              : "bg-black text-white hover:bg-gray-800"
+          }`}
+        >
           Previous
         </button>
         <span className="px-4 py-2">Page {page}</span>
         <button
-          onClick={() => setPage(prev => prev + 1)}
+          onClick={() => setPage((prev) => prev + 1)}
           disabled={users.length < limit}
-          className={`px-4 py-2 rounded ${users.length < limit ? 'bg-gray-200 text-gray-500' : 'bg-black text-white hover:bg-gray-800'
-            }`}>
+          className={`px-4 py-2 rounded ${
+            users.length < limit
+              ? "bg-gray-200 text-gray-500"
+              : "bg-black text-white hover:bg-gray-800"
+          }`}
+        >
           Next
         </button>
       </div>
 
+      {/* Delete Dialog */}
       <DeleteConfirmationDialog
         isOpen={deleteDialogState.isOpen}
         onClose={() => setDeleteDialogState({ isOpen: false })}
         onConfirm={() => {
-          if (deleteDialogState.userId && deleteDialogState.userRole) {
-            handleDeleteUser(deleteDialogState.userId, deleteDialogState.userRole);
+          if (deleteDialogState.userId) {
+            handleDeleteUser(deleteDialogState.userId);
           }
         }}
         userName={deleteDialogState.userName || ""}
       />
 
+      {/* Edit Dialog */}
       <EditUserDialog
         isOpen={editDialogState.isOpen}
         user={editDialogState.user}
         onClose={() => setEditDialogState({ isOpen: false })}
-        onSuccess={() => {
-          const fetchUsers = async () => {
-            try {
-              const response = await fetch(
-                `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users?page=${page}&limit=${limit}`,
-                {
-                  credentials: 'include'
-                }
-              );
-              if (!response.ok) throw new Error('Failed to fetch users');
-              const result = await response.json();
-              if (result.success) {
-                setUsers(result.data);
+        onSuccess={async () => {
+          try {
+            const { data } = await axios.get<PaginatedResponse>(
+              `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users`,
+              {
+                params: { page, limit },
+                withCredentials: true,
               }
-            } catch (error) {
-              console.error('Error fetching users:', error);
+            );
+            if (data?.success && Array.isArray(data.data)) {
+              setUsers(data.data);
             }
-          };
-          fetchUsers();
+          } catch (error) {
+            console.error("Error refreshing users after edit:", error);
+          }
         }}
       />
     </div>
   );
 };
 
-const DeleteConfirmationDialog = ({
-  isOpen,
-  onClose,
-  onConfirm,
-  userName
-}: {
+// Confirmation dialog with props properly typed
+const DeleteConfirmationDialog: React.FC<{
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
   userName: string;
-}) => {
+}> = ({ isOpen, onClose, onConfirm, userName }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Confirm Delete User</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete {userName || "this user"}? This action cannot be undone.
+            Are you sure you want to delete {userName}? This action cannot be
+            undone.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="mt-4">
