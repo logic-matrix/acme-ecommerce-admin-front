@@ -1,183 +1,118 @@
-// import { Link } from "@/components/ui/link";
 import { Separator } from "@/components/ui/separator";
 import { Facebook, Instagram, Youtube } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
+// Define footer links in separate arrays for better organization
+const companyLinks = [
+  { label: "About Us", href: "#" },
+  { label: "Contact Us", href: "#" },
+  { label: "Visit Our Store", href: "#" },
+  { label: "Locate Us", href: "#" },
+  { label: "Blog", href: "#" },
+];
+
+const legalLinks = [
+  { label: "FAQs", href: "#" },
+  { label: "Payment Info", href: "#" },
+  { label: "Exchange And Returns", href: "#" },
+  { label: "Track Your Order", href: "#" },
+];
+
+const quickLinks = [
+  { label: "Shop All", href: "#" },
+  { label: "Best Sellers", href: "#" },
+  { label: "Deals", href: "#" },
+  { label: "Trending Products", href: "#" },
+];
+
+const socialLinks = [
+  { Icon: Facebook, href: "#", label: "Facebook" },
+  { Icon: Instagram, href: "#", label: "Instagram" },
+  { Icon: Youtube, href: "#", label: "Youtube" },
+];
+
+const FooterLinkSection = ({ title, links }) => (
+  <div className="space-y-4">
+    <h3 className="font-semibold text-white">{title}</h3>
+    <ul className="space-y-2">
+      {links.map((link) => (
+        <li key={link.label}>
+          <Link
+            href={link.href}
+            className="text-white hover:text-gray-300 text-sm"
+          >
+            {link.label}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  </div>
+);
+
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="bg-gray-50">
+    <footer className="bg-[#1A1B1C] ">
       <div className="container mx-auto px-4 py-12">
+        {/* Main footer grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Logo and Company Description */}
+          {/* Brand section */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <span className="font-bold text-xl text-gray-900">ACME</span>
-              <span className="text-sm text-gray-700">ELECTRONICS</span>
+              <Image
+                src="/website/footer-logo.svg"
+                width={140}
+                height={35}
+                alt="Acme logo"
+              />
             </div>
 
-            <p className="text-gray-600 text-sm">
+            <p className="text-[#E2E4E6] text-sm">
               We offer a variety of tech products in various categories. Shipped
               from California
             </p>
 
-            <div className="flex space-x-4">
-              <Link href="#" className="text-gray-500 hover:text-gray-700">
-                <Facebook size={18} />
-              </Link>
-              <Link href="#" className="text-gray-500 hover:text-gray-700">
-                <Instagram size={18} />
-              </Link>
-              <Link href="#" className="text-gray-500 hover:text-gray-700">
-                <Youtube size={18} />
-              </Link>
+            <div className="flex space-x-4 ">
+              {socialLinks.map(({ Icon, href, label }) => (
+                <Link
+                  key={label}
+                  href={href}
+                  className="  bg-[#555555] border rounded-full w-[50px] h-[50px] flex justify-center items-center "
+                  aria-label={label}
+                >
+                  <Icon size={18} color="white" />
+                </Link>
+              ))}
             </div>
           </div>
 
-          {/* Company Links */}
-          <div className="space-y-4">
-            <h3 className="font-semibold text-gray-900">Company</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 text-sm"
-                >
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 text-sm"
-                >
-                  Contact Us
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 text-sm"
-                >
-                  Visit Our Store
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 text-sm"
-                >
-                  Locate Us
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 text-sm"
-                >
-                  Blog
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Legal Links */}
-          <div className="space-y-4">
-            <h3 className="font-semibold text-gray-900">Legal</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 text-sm"
-                >
-                  FAQs
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 text-sm"
-                >
-                  Payment Info
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 text-sm"
-                >
-                  Exchange And Returns
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 text-sm"
-                >
-                  Track Your Order
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Quick Links */}
-          <div className="space-y-4">
-            <h3 className="font-semibold text-gray-900">Quick Links</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 text-sm"
-                >
-                  Shop All
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 text-sm"
-                >
-                  Best Sellers
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 text-sm"
-                >
-                  Deals
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-gray-600 hover:text-gray-900 text-sm"
-                >
-                  Trending Products
-                </Link>
-              </li>
-            </ul>
-          </div>
+          {/* Navigation sections */}
+          <FooterLinkSection title="Company" links={companyLinks} />
+          <FooterLinkSection title="Legal" links={legalLinks} />
+          <FooterLinkSection title="Quick Links" links={quickLinks} />
         </div>
 
-        {/* Large ACME background text */}
+        {/* Brand Name */}
         <div className="relative mt-12 mb-8">
-          <h2 className="text-6xl md:text-8xl font-bold text-gray-100 text-center">
-            ACMELECTRONICS
+          <h2 className="text-6xl md:text-8xl tracking-widest font-bold text-black/50  text-center">
+            ACME ELECTRONICS
           </h2>
         </div>
 
-        {/* Footer Bottom */}
-        <Separator className="my-6" />
-        <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-600">
+        {/* Copyright section */}
+        <Separator className="my-6 " />
+        <div className="flex flex-col md:flex-row justify-between items-center text-sm text-white">
           <div className="flex space-x-4 mb-4 md:mb-0">
-            <Link href="#" className="hover:text-gray-900">
+            <Link href="#" className="">
               Privacy policy
             </Link>
-            <Link href="#" className="hover:text-gray-900">
+            <Link href="#" className="">
               Terms of Use
             </Link>
           </div>
-          <p>© 2025, All Rights Reserved</p>
+          <p>© {currentYear}, All Rights Reserved</p>
         </div>
       </div>
     </footer>
