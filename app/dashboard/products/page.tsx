@@ -190,7 +190,9 @@ const Page = () => {
                     className="cursor-pointer"
                     onClick={() => handleView(product.id)}
                   />
-                  <Pencil width={16} className="cursor-pointer" />
+                  <Link href={`/dashboard/products/edit/${product.id}`}>
+                    <Pencil width={16} className="cursor-pointer" />
+                  </Link>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Trash2
@@ -263,12 +265,12 @@ const Page = () => {
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
-              {/* {selectedProduct?.images.length > 0 && (
-                <div className="flex flex-col gap-2">
+              {selectedProduct?.images.length > 0 && (
+                <div className="flex gap-2 justify-start w-full flex-wrap">
                   {selectedProduct.images.map((image) => (
-                    <Image
+                    <img
                       key={image}
-                      src={image}
+                      src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/images/${image}`}
                       height={128}
                       width={128}
                       alt="Product Image"
@@ -276,7 +278,7 @@ const Page = () => {
                     />
                   ))}
                 </div>
-              )} */}
+              )}
             </DialogFooter>
           </DialogContent>
         </Dialog>
