@@ -53,7 +53,7 @@ export default function SignInPage() {
           if (response.data?.user.role === "admin") {
             router.push("/dashboard");
           } else {
-            router.push("/");
+            router.push("/userpanel");
           }
         }
       } catch (err: unknown) {
