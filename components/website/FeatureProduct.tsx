@@ -53,7 +53,7 @@ const products = [
   },
 ];
 
-const BestSellers = () => {
+const FeatureProduct = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 3;
   const totalPages = Math.ceil(products.length / itemsPerPage);
@@ -144,4 +144,4 @@ const BestSellers = () => {
   );
 };
 
-export default BestSellers;
+export default FeatureProduct;
