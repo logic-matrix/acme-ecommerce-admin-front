@@ -7,7 +7,7 @@ const AboutUs = () => {
     <section className="container mx-auto  py-12 md:py-24 bg-white">
       <div className="flex flex-col md:flex-row justify-center items-center gap-12 md:gap-16">
         {/* Left side - Images */}
-        <div>
+        <div className="w-1/2">
           <div>
             <Image
               src="/website/aboutus-1.jpg"

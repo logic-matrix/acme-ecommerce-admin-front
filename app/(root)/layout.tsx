@@ -1,3 +1,6 @@
+// import Navbar from "@/components/Navbar";
+import Footer from "@/components/website/Footer";
+import Navbar from "@/components/website/Navbar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,7 +16,9 @@ export default function RootLayout({
 }>) {
   return (
     <main>
-      <div className="h-screen">{children}</div>
+      <Navbar></Navbar>
+      <div>{children}</div>
+      <Footer></Footer>
     </main>
   );
 }
