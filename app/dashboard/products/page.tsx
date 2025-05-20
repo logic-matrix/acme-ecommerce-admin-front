@@ -1,4 +1,7 @@
 "use client";
+
+import axios from "axios";
+import Loader from "@/components/common/loader";
 import {
   CustomTable,
   CustomTableBody,
@@ -8,12 +11,30 @@ import {
   CustomTableRow,
 } from "@/components/dashboard/CustomDataTable";
 import TotalStatCard from "@/components/dashboard/TotalStatCard";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
-// Define interfaces for the product and category
 interface Product {
   id: number;
   name: string;
@@ -21,7 +42,6 @@ interface Product {
   stock: number;
   status: string;
   images: string[];
-  description?: string | null;
   categoryId: number;
   category: Category;
   createdAt: string;
@@ -35,48 +55,58 @@ interface Category {
   updatedAt: string;
 }
 
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case "low stock":
-      return "bg-orange-100 text-orange-500";
-    case "out of stock":
-      return "bg-red-100 text-red-500";
-    case "in stock":
-      return "bg-green-100 text-green-500";
-    default:
-      return "bg-gray-100 text-gray-800";
-  }
-};
-
 const Page = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    // Fetch product data from the API
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/products`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch products");
-        }
-        const data = await response.json();
-        console.log(data);
-        setProducts(data.data);
-      } catch (err) {
-        setError("Error fetching product data.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [showViewDialog, setShowViewDialog] = useState(false);
 
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/products`
+      );
+      setProducts(response.data.data);
+      // console.log(response.data.data);
+    } catch {
+      setError("Error fetching product data.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleView = async (id: number) => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/products/${id}`,
+        { withCredentials: true }
+      );
+      setSelectedProduct(response.data.data);
+      // console.log(response.data.data);
+      setShowViewDialog(true);
+    } catch {
+      alert("Error fetching product details.");
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    try {
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/products/${id}`,
+        { withCredentials: true }
+      );
+      setProducts((prev) => prev.filter((p) => p.id !== id));
+    } catch {
+      alert("Error deleting product.");
+    }
+  };
+
+  useEffect(() => {
     fetchProducts();
   }, []);
 
-  // Calculate stats for each category and show them in totalStatCard
   const inStockCount = products.filter((p) => p.status === "in stock").length;
   const lowStockCount = products.filter((p) => p.status === "low stock").length;
   const outOfStockCount = products.filter(
@@ -84,16 +114,17 @@ const Page = () => {
   ).length;
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-[70vh]">
+        <Loader />
+      </div>
+    );
   }
 
-  if (error) {
-    return <div>{error}</div>;
-  }
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="container">
-      {/* product */}
       <div className="flex justify-between mb-4">
         <div className="flex flex-col">
           <h1 className="font-semibold text-3xl">Product</h1>
@@ -102,11 +133,10 @@ const Page = () => {
           </p>
         </div>
         <Link href="/dashboard/products/create">
-          <Button>Add Product</Button>
+          <Button className="cursor-pointer">Add Product</Button>
         </Link>
       </div>
 
-      {/* TotalStat */}
       <div className="flex justify-between gap-2 mb-4">
         <TotalStatCard
           total={products.length}
@@ -134,7 +164,6 @@ const Page = () => {
         />
       </div>
 
-      {/* Table without tabs */}
       <CustomTable>
         <CustomTableHeader>
           <CustomTableRow>
@@ -143,7 +172,6 @@ const Page = () => {
             <CustomTableHead>Category</CustomTableHead>
             <CustomTableHead>Price</CustomTableHead>
             <CustomTableHead>Stock</CustomTableHead>
-            {/* <CustomTableHead>Status</CustomTableHead> */}
             <CustomTableHead>Action</CustomTableHead>
           </CustomTableRow>
         </CustomTableHeader>
@@ -155,35 +183,105 @@ const Page = () => {
               <CustomTableCell>{product.category.name}</CustomTableCell>
               <CustomTableCell>{product.price}</CustomTableCell>
               <CustomTableCell>{product.stock}</CustomTableCell>
-              {/* <CustomTableCell className="capitalize">
-                <span
-                  className={`${getStatusColor(
-                    product.status
-                  )} px-3 rounded-4xl py-1 font-semibold`}
-                >
-                  {product.status}
-                </span>
-              </CustomTableCell> */}
-              {/* Action Buttons */}
               <CustomTableCell>
-                <div className="flex justify-between">
-                  <span className="cursor-pointer">
-                    <Eye width={16} />
-                  </span>
-                  <span className="cursor-pointer">
-                    <Pencil width={16} />
-                  </span>
-                  <span className="cursor-pointer">
-                    <Trash2 width={16} className="text-red-400" />
-                  </span>
+                <div className="flex gap-2">
+                  <Eye
+                    width={16}
+                    className="cursor-pointer"
+                    onClick={() => handleView(product.id)}
+                  />
+                  <Link href={`/dashboard/products/edit/${product.id}`}>
+                    <Pencil width={16} className="cursor-pointer" />
+                  </Link>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Trash2
+                        className="text-red-500 cursor-pointer"
+                        width={16}
+                      />
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This will permanently delete product:{" "}
+                          <strong>{product.name}</strong>
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDelete(product.id)}
+                        >
+                          Yes, delete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </CustomTableCell>
             </CustomTableRow>
           ))}
         </CustomTableBody>
       </CustomTable>
+
       {products.length === 0 && (
         <div className="text-center py-8 text-gray-500">No products found.</div>
+      )}
+
+      {/* View Product Dialog */}
+      {selectedProduct && (
+        <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Product Details</DialogTitle>
+              <DialogDescription>
+                <div className="space-y-2 text-left">
+                  <div className="flex gap-4">
+                    <p>
+                      <strong>Name:</strong>{" "}
+                      <strong>{selectedProduct?.name}</strong>
+                    </p>
+                    <p>
+                      <strong>Category:</strong>{" "}
+                      {selectedProduct?.category.name}
+                    </p>
+                  </div>
+                  <p>
+                    <strong>Price:</strong> {selectedProduct?.price}
+                  </p>
+                  <p>
+                    <strong>Stock:</strong> {selectedProduct?.stock}
+                  </p>
+                  <p>
+                    <strong>Status:</strong>{" "}
+                    {selectedProduct?.status ? (
+                      <span className="text-green-500">Active</span>
+                    ) : (
+                      <span className="text-red-500">Inactive</span>
+                    )}
+                  </p>
+                </div>
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              {selectedProduct?.images.length > 0 && (
+                <div className="flex gap-2 justify-start w-full flex-wrap">
+                  {selectedProduct.images.map((image) => (
+                    <img
+                      key={image}
+                      src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/images/${image}`}
+                      height={128}
+                      width={128}
+                      alt="Product Image"
+                      className="w-32 h-32 object-cover rounded-md"
+                    />
+                  ))}
+                </div>
+              )}
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       )}
     </div>
   );
