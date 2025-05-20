@@ -1,4 +1,3 @@
-// middleware.ts
 import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
@@ -8,21 +7,23 @@ export async function middleware(request: NextRequest) {
   const isAuthRoute = ["/sign-in", "/sign-up", "/forget", "/otp"].includes(
     path
   );
-  const isAdminOnlyRoute = path.startsWith("/dashboard");
+  const isAdminRoute = path.startsWith("/dashboard");
+  const isUserRoute = path.startsWith("/userpanel");
 
-  // If not logged in
+  // If user is NOT logged in
   if (!token) {
-    if (isAuthRoute) {
+    if (isAuthRoute || path === "/") {
       return NextResponse.next();
     }
 
-    if (path === "/" || isAdminOnlyRoute) {
+    if (isAdminRoute || isUserRoute) {
       return NextResponse.redirect(new URL("/sign-in", request.url));
     }
 
     return NextResponse.next();
   }
 
+  // Logged in — fetch user profile
   const res = await fetch(`${request.nextUrl.origin}/api/proxy/profile`, {
     headers: {
       Cookie: request.headers.get("cookie") || "",
@@ -30,14 +31,15 @@ export async function middleware(request: NextRequest) {
   });
 
   const user = await res.json();
-
   const isAdmin = user?.role === "admin";
 
+  // Authenticated user shouldn't access auth routes
   if (isAuthRoute) {
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL("/userpanel", request.url));
   }
 
-  if (isAdminOnlyRoute && !isAdmin) {
+  // Admin routes access control
+  if (isAdminRoute && !isAdmin) {
     return NextResponse.redirect(new URL("/unauthorized", request.url));
   }
 
@@ -45,5 +47,13 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/dashboard/:path*", "/sign-in", "/sign-up", "/forget"],
+  matcher: [
+    "/",
+    "/dashboard/:path*",
+    "/userpanel/:path*",
+    "/sign-in",
+    "/sign-up",
+    "/forget",
+    "/otp",
+  ],
 };
