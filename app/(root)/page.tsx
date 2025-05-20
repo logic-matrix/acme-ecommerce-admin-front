@@ -1,8 +1,8 @@
 "use client";
+import AboutUs from "@/components/website/AboutUs";
 import BestSellers from "@/components/website/BestSeller";
 import CuratedElectronic from "@/components/website/CuratedElectronic";
 import Footer from "@/components/website/Footer";
-import HeroSection from "@/components/website/HeroSection";
 import Navbar from "@/components/website/Navbar";
 import ProductShowcase from "@/components/website/ProductCard";
 import ShippingBenefits from "@/components/website/ShippingBenefits";
@@ -18,15 +18,16 @@ const Home = () => {
   return (
     <div>
       <Navbar></Navbar>
-      <HeroSection></HeroSection>
+      {/* <HeroSection></HeroSection> */}
+      <AboutUs></AboutUs>
       <ShippingBenefits></ShippingBenefits>
       <CuratedElectronic></CuratedElectronic>
       <BestSellers></BestSellers>
       <ShopByCategory></ShopByCategory>
       <ProductShowcase></ProductShowcase>
       <TrendingProducts></TrendingProducts>
-      <SubscribeSection></SubscribeSection>
       <Testimonials></Testimonials>
+      <SubscribeSection></SubscribeSection>
       <Footer></Footer>
     </div>
   );
