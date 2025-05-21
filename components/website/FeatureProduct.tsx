@@ -127,12 +127,12 @@ const FeatureProduct = () => {
           ))}
         </div>
 
-        <div className="flex justify-center space-x-2 mt-8">
+        <div className="flex justify-center space-x-2 mt-8 cursor-pointer">
           {Array.from({ length: totalPages }, (_, i) => (
             <button
               key={i}
               onClick={() => goToPage(i)}
-              className={`h-2 rounded-full transition-all ${
+              className={` h-2 rounded-full transition-all ${
                 currentPage === i ? "w-8 bg-gray-800" : "w-2 bg-gray-300"
               }`}
               aria-label={`Go to page ${i + 1}`}

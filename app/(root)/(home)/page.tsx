@@ -1,6 +1,7 @@
 "use client";
 import AboutUs from "@/components/website/AboutUs";
 import CategoryCards from "@/components/website/CategoryCards";
+import CTA from "@/components/website/CTA";
 import CuratedElectronic from "@/components/website/CuratedElectronic";
 import FeatureProduct from "@/components/website/FeatureProduct";
 import HeroSlider from "@/components/website/HeroSlider";
@@ -14,12 +15,14 @@ const Home = () => {
   console.log(user);
   return (
     <div>
-      <HeroSlider></HeroSlider>
+      {/* <HeroSlider></HeroSlider> */}
+      <HeroSlider />
       <AboutUs></AboutUs>
       <CategoryCards />
+      <CuratedElectronic />
       <ShippingBenefits></ShippingBenefits>
-      <CuratedElectronic></CuratedElectronic>
       <FeatureProduct></FeatureProduct>
+      <CTA />
       {/* <ShopByCategory></ShopByCategory> */}
       {/* <ProductShowcase></ProductShowcase> */}
       {/* <TrendingProducts></TrendingProducts> */}
