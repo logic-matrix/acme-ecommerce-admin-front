@@ -1,14 +1,13 @@
 "use client";
 import AboutUs from "@/components/website/AboutUs";
-import BestSellers from "@/components/website/BestSeller";
+import CategoryCards from "@/components/website/CategoryCards";
+import CTA from "@/components/website/CTA";
 import CuratedElectronic from "@/components/website/CuratedElectronic";
-import HeroSection from "@/components/website/HeroSection";
-import ProductShowcase from "@/components/website/ProductCard";
+import FeatureProduct from "@/components/website/FeatureProduct";
+import HeroSlider from "@/components/website/HeroSlider";
 import ShippingBenefits from "@/components/website/ShippingBenefits";
-import ShopByCategory from "@/components/website/ShopByCategory";
 import SubscribeSection from "@/components/website/Subscrition";
 import Testimonials from "@/components/website/Testimonials";
-import TrendingProducts from "@/components/website/TrendingProduct";
 import { useUserStore } from "../../store/useUserStore";
 
 const Home = () => {
@@ -16,14 +15,17 @@ const Home = () => {
   console.log(user);
   return (
     <div>
-      <HeroSection></HeroSection>
+      {/* <HeroSlider></HeroSlider> */}
+      <HeroSlider />
       <AboutUs></AboutUs>
+      <CategoryCards />
+      <CuratedElectronic />
       <ShippingBenefits></ShippingBenefits>
-      <CuratedElectronic></CuratedElectronic>
-      <BestSellers></BestSellers>
-      <ShopByCategory></ShopByCategory>
-      <ProductShowcase></ProductShowcase>
-      <TrendingProducts></TrendingProducts>
+      <FeatureProduct></FeatureProduct>
+      <CTA />
+      {/* <ShopByCategory></ShopByCategory> */}
+      {/* <ProductShowcase></ProductShowcase> */}
+      {/* <TrendingProducts></TrendingProducts> */}
       <Testimonials></Testimonials>
       <SubscribeSection></SubscribeSection>
       {/* <Footer></Footer> */}
