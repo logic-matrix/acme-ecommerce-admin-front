@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect, useRef } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -10,6 +11,16 @@ import productData from "@/data/product.data";
 import ProductsCard from "./ProductsCard";
 
 const SliderRecomanded = () => {
+  const nextRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      nextRef.current?.click();
+    }, 30000);
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
+
   return (
     <div className="py-10 mx-auto px-4">
       <div>
@@ -23,7 +34,6 @@ const SliderRecomanded = () => {
             align: "start",
             loop: true,
           }}
-          className=""
         >
           <CarouselContent>
             {productData.slice(0, 5).map((product, index) => (
@@ -42,7 +52,7 @@ const SliderRecomanded = () => {
             ))}
           </CarouselContent>
           <CarouselPrevious />
-          <CarouselNext />
+          <CarouselNext ref={nextRef} />
         </Carousel>
       </div>
     </div>
