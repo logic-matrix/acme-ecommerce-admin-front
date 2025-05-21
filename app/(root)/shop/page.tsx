@@ -8,6 +8,7 @@ import ShippingBenefits from "@/components/website/ShippingBenefits";
 import SubscribeSection from "@/components/website/Subscrition";
 import productData from "@/data/product.data";
 import SliderRecomanded from "@/components/website/SliderRecomanded";
+import CTA from "@/components/website/CTA";
 
 type Product = {
   id: number;
@@ -93,7 +94,7 @@ const ShopPage = () => {
   );
 
   return (
-    <div className="min-h-screen md:container px-12 mx-auto">
+    <div className="min-h-screen md:container md:px-12 mx-auto">
       <BannarSection
         imageurl="/website/bannercategorytopimg.jpg"
         title="SHOP"
@@ -167,6 +168,9 @@ const ShopPage = () => {
         </div>
       </div>
       <SliderRecomanded />
+      <div className="mb-10">
+        <CTA />
+      </div>
       <ShippingBenefits />
       <SubscribeSection />
     </div>
