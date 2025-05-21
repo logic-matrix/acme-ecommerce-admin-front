@@ -23,7 +23,7 @@ const BannarSection = ({
         </div>
         {/* text  */}
         <div className="absolute top-0 w-full flex justify-center items-center h-full bg-black/20">
-          <h2 className="text-[262.12px] font-[400]  text-center text-white">
+          <h2 className="text-7xl md:text-[200px] lg:text-[262.12px] font-[400]  text-center text-white">
             {title}
           </h2>
         </div>
