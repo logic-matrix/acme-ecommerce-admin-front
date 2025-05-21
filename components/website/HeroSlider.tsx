@@ -4,6 +4,8 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
@@ -38,25 +40,48 @@ const sliderData = [
 ];
 
 const HeroSlider = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [api, setApi] = useState(null);
+  const [current, setCurrent] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+
+  // Set up carousel API
+  const onApiChange = (api) => {
+    setApi(api);
+
+    // Listen for carousel changes
+    api?.on("select", () => {
+      setCurrent(api.selectedScrollSnap());
+      // Pause auto-play temporarily when manually navigated
+      setIsAutoPlaying(false);
+      setTimeout(() => setIsAutoPlaying(true), 10000);
+    });
+  };
+
+  // Handle manual slide selection
+  const handleDotClick = (index) => {
+    if (!api) return;
+    api.scrollTo(index);
+    setCurrent(index);
+    setIsAutoPlaying(false);
+    setTimeout(() => setIsAutoPlaying(true), 10000);
+  };
 
   // Auto-play functionality
   useEffect(() => {
-    if (!isAutoPlaying) return;
+    if (!isAutoPlaying || !api) return;
 
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % sliderData.length);
+      api.scrollNext();
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [isAutoPlaying]);
+  }, [isAutoPlaying, api]);
 
   return (
-    <div className="container px-12 mx-auto">
-      <div className="relative w-full h-[90vh]   overflow-hidden   ">
+    <div className="container px-4 md:px-12 mx-auto">
+      <div className="relative w-full h-[90vh] overflow-hidden">
         {/* User testimonials */}
-        <div className="absolute top-1/5 left-10 z-20 flex items-center">
+        <div className="absolute top-8 left-8 z-20 flex items-center">
           <div className="flex -space-x-2">
             {[1, 2, 3].map((i) => (
               <div
@@ -64,52 +89,41 @@ const HeroSlider = () => {
                 className="w-8 h-8 rounded-full border-2 border-white bg-gray-300 overflow-hidden"
               >
                 <img
-                  src={`https://randomuser.me/api/portraits/${
-                    i % 2 === 0 ? "men" : "women"
-                  }/${i + 10}.jpg`}
-                  alt="User"
+                  src={`/api/placeholder/32/32`}
+                  alt={`User ${i}`}
                   className="w-full h-full object-cover"
                 />
               </div>
             ))}
           </div>
           <div className="flex flex-col items-start ml-3">
-            <span className="text-white  text-sm font-medium">7,000+</span>
-            <span className="text-white/80  text-sm">
+            <span className="text-white text-sm font-medium">7,000+</span>
+            <span className="text-white/80 text-sm">
               People are our regular users
             </span>
           </div>
         </div>
 
         {/* Main carousel */}
-        <Carousel
-          className=""
-          current={currentSlide}
-          onSelect={(index) => {
-            setCurrentSlide(index);
-            setIsAutoPlaying(false);
-            // Resume auto-play after manual interaction
-            setTimeout(() => setIsAutoPlaying(true), 10000);
-          }}
-        >
-          <CarouselContent className="h-[90vh] ">
-            {sliderData.map((slide, index) => (
-              <CarouselItem key={slide.id} className="h-full ">
+        <Carousel className="h-full" setApi={onApiChange}>
+          <CarouselContent className="h-[90vh]">
+            {sliderData.map((slide) => (
+              <CarouselItem key={slide.id} className="h-full">
                 <Card className="h-full border-0 rounded-none">
                   <CardContent className="flex items-center justify-start h-full p-0 relative">
                     {/* Background image with overlay */}
-                    <div className="absolute inset-0 z-0 rounded-4xl">
+                    <div className="absolute inset-0 z-0">
                       <img
                         src={slide.image}
                         alt="Headphones"
-                        className="w-full h-full object-cover "
+                        className="w-full h-full object-cover"
                       />
                       <div className="absolute inset-0 bg-black/60"></div>
                     </div>
 
                     {/* Content */}
-                    <div className="relative z-10 p-10 max-w-2xl">
-                      <h1 className="text-white text-[127px] md:text-6xl font-bold tracking-tight mb-6">
+                    <div className="relative z-10 p-6 md:p-10 max-w-2xl">
+                      <h1 className="text-white text-4xl md:text-6xl font-bold tracking-tight mb-6">
                         {slide.title}
                       </h1>
                       <p className="text-white/80 mb-8 max-w-lg">
@@ -125,6 +139,9 @@ const HeroSlider = () => {
               </CarouselItem>
             ))}
           </CarouselContent>
+
+          <CarouselPrevious className="left-4 bg-white/10 hover:bg-white/20 border-0 text-white" />
+          <CarouselNext className="right-4 bg-white/10 hover:bg-white/20 border-0 text-white" />
         </Carousel>
 
         {/* Pagination dots */}
@@ -134,15 +151,11 @@ const HeroSlider = () => {
               key={index}
               className={cn(
                 "w-2 h-2 rounded-full transition-all duration-300",
-                currentSlide === index
+                current === index
                   ? "bg-white w-6"
                   : "bg-white/50 hover:bg-white/80"
               )}
-              onClick={() => {
-                setCurrentSlide(index);
-                setIsAutoPlaying(false);
-                setTimeout(() => setIsAutoPlaying(true), 10000);
-              }}
+              onClick={() => handleDotClick(index)}
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}
