@@ -13,15 +13,19 @@ type Product = {
 
 type ProductsCardProps = {
   product: Product;
+  className?: string;
 };
 
-export default function ProductsCard({ product }: ProductsCardProps) {
+export default function ProductsCard({
+  product,
+  className,
+}: ProductsCardProps) {
   return (
-    <div className="p-4 rounded-lg border shadow-sm w-[322px]">
+    <div className={`p-4 rounded-lg border shadow-sm w-[322px] ${className}`}>
       <img
         src={product.image}
         alt={product.name}
-        className="w-full h-[282px] w-[299.96px] object-contain bg-black/5"
+        className="h-[282px] w-full object-contain bg-black/5"
       />
       <h3 className="mt-2 font-bold text-lg">{product.name}</h3>
       <div className="flex justify-between">
@@ -36,8 +40,10 @@ export default function ProductsCard({ product }: ProductsCardProps) {
         <p className="font-bold">${product.price}</p>
       </div>
       <div className="flex gap-2 mt-2">
-        <Button>Add to Cart</Button>
-        <Button variant="outline">Buy Now</Button>
+        <Button className="w-1/2">Add to Cart</Button>
+        <Button className="w-1/2" variant="outline">
+          Buy Now
+        </Button>
       </div>
     </div>
   );
