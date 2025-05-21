@@ -1,12 +1,15 @@
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 import React from "react";
 
 const BannarSection = ({
   imageurl,
   title,
+  bannarImageClass,
 }: {
   imageurl: string;
   title: string;
+  bannarImageClass?: string;
 }) => {
   return (
     <div>
@@ -16,7 +19,10 @@ const BannarSection = ({
           <Image
             src={imageurl}
             alt={title}
-            className="w-full lg:max-h-[376px] object-cover rounded-lg"
+            className={cn(
+              "w-full lg:h-[376px] object-cover rounded-lg",
+              bannarImageClass
+            )}
             width={1232}
             height={376}
           />
