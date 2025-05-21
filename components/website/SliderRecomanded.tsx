@@ -6,7 +6,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "../ui/carousel";
-import { Card, CardContent } from "../ui/card";
 import productData from "@/data/product.data";
 import ProductsCard from "./ProductsCard";
 
@@ -42,6 +41,8 @@ const SliderRecomanded = () => {
               </CarouselItem>
             ))}
           </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
         </Carousel>
       </div>
     </div>
