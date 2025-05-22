@@ -1,4 +1,5 @@
 import BannarSection from "@/components/website/BannarSection";
+import OurClients from "@/components/website/OurClients";
 import OurStory from "@/components/website/OurStory";
 import React from "react";
 
@@ -11,6 +12,7 @@ const AboutUsPage = () => {
         bannarImageClass="md:min-h-[535px]"
       />
       <OurStory />
+      <OurClients />
     </div>
   );
 };
