@@ -6,6 +6,7 @@ import CuratedElectronic from "@/components/website/CuratedElectronic";
 import FeatureProduct from "@/components/website/FeatureProduct";
 import HeroSlider from "@/components/website/HeroSlider";
 import ShippingBenefits from "@/components/website/ShippingBenefits";
+import SpecialOffersCarousel from "@/components/website/SpecialOffersCarousel";
 import SubscribeSection from "@/components/website/Subscrition";
 import Testimonials from "@/components/website/Testimonials";
 import { useUserStore } from "../../store/useUserStore";
@@ -15,20 +16,16 @@ const Home = () => {
   console.log(user);
   return (
     <div>
-      {/* <HeroSlider></HeroSlider> */}
       <HeroSlider />
-      <AboutUs></AboutUs>
+      <AboutUs />
       <CategoryCards />
       <CuratedElectronic />
-      <ShippingBenefits></ShippingBenefits>
-      <FeatureProduct></FeatureProduct>
+      <FeatureProduct />
       <CTA />
-      {/* <ShopByCategory></ShopByCategory> */}
-      {/* <ProductShowcase></ProductShowcase> */}
-      {/* <TrendingProducts></TrendingProducts> */}
-      <Testimonials></Testimonials>
-      <SubscribeSection></SubscribeSection>
-      {/* <Footer></Footer> */}
+      <ShippingBenefits />
+      <SpecialOffersCarousel />
+      <Testimonials />
+      <SubscribeSection />
     </div>
   );
 };

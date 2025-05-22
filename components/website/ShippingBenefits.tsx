@@ -1,5 +1,5 @@
 // components/ShippingBenefits.jsx
-import { Award, Clock, CreditCard, Truck } from "lucide-react";
+import { BadgeCheck, Clock, CreditCard, Truck } from "lucide-react";
 
 const ShippingBenefits = () => {
   return (
@@ -7,24 +7,24 @@ const ShippingBenefits = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Fast & Free Shipping */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 border  p-4 rounded-xl hover:shadow-lg">
             <div className="w-10 h-10 flex items-center justify-center">
-              <Truck size={34} />
+              <Truck size={30} />
             </div>
             <div>
               <h3 className="text-3xl font-semibold text-gray-900">
                 Fast & Free Shipping
               </h3>
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-3 text-sm text-gray-500">
                 Every single order ships for free. No extra credit needed.
               </p>
             </div>
           </div>
 
           {/* 30 Days Returns */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 border  p-4 rounded-xl hover:shadow-lg">
             <div className="w-10 h-10 flex items-center justify-center">
-              <Clock size={34} />
+              <Clock size={30} />
             </div>
             <div>
               <h3 className="text-3xl font-semibold text-gray-900">
@@ -37,9 +37,9 @@ const ShippingBenefits = () => {
           </div>
 
           {/* Secure Payment */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 border  p-4 rounded-xl hover:shadow-lg">
             <div className="w-10 h-10 flex items-center justify-center">
-              <CreditCard size={34} />
+              <CreditCard size={30} />
             </div>
             <div>
               <h3 className="text-3xl font-semibold text-gray-900">
@@ -52,9 +52,9 @@ const ShippingBenefits = () => {
           </div>
 
           {/* Great Quality */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 border  p-4 rounded-xl hover:shadow-lg">
             <div className="w-10 h-10 flex items-center justify-center">
-              <Award size={34} />
+              <BadgeCheck size={30} />
             </div>
             <div>
               <h3 className="text-3xl font-semibold text-gray-900">
