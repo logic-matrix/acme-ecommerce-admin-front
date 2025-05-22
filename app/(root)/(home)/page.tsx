@@ -16,22 +16,16 @@ const Home = () => {
   console.log(user);
   return (
     <div>
-      {/* <HeroSlider></HeroSlider> */}
       <HeroSlider />
-      <AboutUs></AboutUs>
+      <AboutUs />
       <CategoryCards />
       <CuratedElectronic />
-
-      <FeatureProduct></FeatureProduct>
+      <FeatureProduct />
       <CTA />
       <ShippingBenefits />
       <SpecialOffersCarousel />
-      {/* <ShopByCategory></ShopByCategory> */}
-      {/* <ProductShowcase></ProductShowcase> */}
-      {/* <TrendingProducts></TrendingProducts> */}
-      <Testimonials></Testimonials>
-      <SubscribeSection></SubscribeSection>
-      {/* <Footer></Footer> */}
+      <Testimonials />
+      <SubscribeSection />
     </div>
   );
 };
