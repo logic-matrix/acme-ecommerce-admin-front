@@ -40,8 +40,8 @@ export default function ProductsCard({
         <p className="font-bold">${product.price}</p>
       </div>
       <div className="flex gap-2 mt-2">
-        <Button className="w-[50%]">Add to Cart</Button>
-        <Button className="w-[47%]" variant="outline">
+        <Button className="w-[50%] cursor-pointer">Add to Cart</Button>
+        <Button className="w-[47%] cursor-pointer" variant="outline">
           Buy Now
         </Button>
       </div>
