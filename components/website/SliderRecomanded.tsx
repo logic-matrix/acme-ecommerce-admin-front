@@ -16,7 +16,7 @@ const SliderRecomanded = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       nextRef.current?.click();
-    }, 30000);
+    }, 4000);
 
     return () => clearInterval(interval); // Cleanup on unmount
   }, []);

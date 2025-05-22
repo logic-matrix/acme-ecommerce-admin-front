@@ -17,11 +17,13 @@ type Filters = {
 type FiltersSidebarProps = {
   filters: Filters;
   onChange: (filter: { type: keyof Filters; value: string | number }) => void;
+  categories: string[];
 };
 
 export default function FiltersSidebar({
   filters,
   onChange,
+  categories,
 }: FiltersSidebarProps) {
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(true);
   const [showAvailabilityDropdown, setShowAvailabilityDropdown] =
@@ -56,8 +58,8 @@ export default function FiltersSidebar({
           <span>{showCategoryDropdown ? <ChevronUp /> : <ChevronDown />}</span>
         </div>
         {showCategoryDropdown && (
-          <div className="space-y-1 ">
-            {["All", "Camera", "Smart TV"].map((category) => (
+          <div className="space-y-1">
+            {categories.map((category) => (
               <label key={category} className="block">
                 <input
                   type="radio"

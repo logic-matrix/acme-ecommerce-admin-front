@@ -20,7 +20,7 @@ const productData: Product[] = [
   {
     id: 2,
     name: "Wireless Bluetooth Headphones",
-    category: "Camera",
+    category: "smartphone",
     price: 299,
     available: true,
     rating: 4.3,

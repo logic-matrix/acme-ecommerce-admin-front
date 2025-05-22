@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BannarSection from "@/components/website/BannarSection";
 import FiltersSidebar from "@/components/website/FiltersSidebar";
 import ProductsCard from "@/components/website/ProductsCard";
@@ -9,6 +9,7 @@ import SubscribeSection from "@/components/website/Subscrition";
 import productData from "@/data/product.data";
 import SliderRecomanded from "@/components/website/SliderRecomanded";
 import CTA from "@/components/website/CTA";
+import axios from "axios";
 
 type Product = {
   id: number;
@@ -37,8 +38,28 @@ const ShopPage = () => {
     sortBy: "",
   });
   const [search, setSearch] = useState("");
+  const [categories, setCategories] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/categories`
+        );
+        const categoryNames = res.data.data.map(
+          (cat: { name: string }) => cat.name
+        );
+        setCategories(["All", ...categoryNames]);
+        // console.log(categoryNames);
+      } catch (error) {
+        console.error("Failed to fetch categories", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleFilterChange = (filter: {
     type: keyof Filters;
@@ -107,7 +128,11 @@ const ShopPage = () => {
 
       <div className="flex flex-col md:flex-row min-h-screen mt-5 md:mt-0">
         <div className="flex justify-center md:justify-start">
-          <FiltersSidebar filters={filters} onChange={handleFilterChange} />
+          <FiltersSidebar
+            categories={categories}
+            filters={filters}
+            onChange={handleFilterChange}
+          />
         </div>
         <div className="flex-1 p-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
