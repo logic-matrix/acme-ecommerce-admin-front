@@ -65,7 +65,7 @@ const Navbar = () => {
               </Link>
             </div>
           </div>
-          <Link href="/about" className="text-sm hover:text-gray-500">
+          <Link href="/about-us" className="text-sm hover:text-gray-500">
             About us
           </Link>
           <Link href="/faqs" className="text-sm hover:text-gray-500">
@@ -96,38 +96,49 @@ const Navbar = () => {
           <button className="p-1 hover:text-gray-500">
             <ShoppingBag size={20} />
           </button>
-          <div className="relative">
-            <button
-              onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-              className="flex items-center space-x-3 focus:outline-none hover:bg-gray-100 px-2 py-1 rounded-lg transition"
+          {user ? (
+            <div className="relative">
+              <button
+                onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                className="flex items-center space-x-3 focus:outline-none hover:bg-gray-100 px-2 py-1 rounded-lg transition"
+              >
+                <div className="h-9 w-9 rounded-md bg-gray-200 flex items-center justify-center shadow-sm">
+                  <User size={18} className="text-gray-700" />
+                </div>
+                <div className="hidden md:block text-left">
+                  <div className="text-sm font-semibold text-gray-800">
+                    {user?.name ? user.name : "Admin User"}
+                  </div>
+                </div>
+                <ChevronDown
+                  size={16}
+                  className={`text-gray-500 transition-transform duration-200 ${
+                    userDropdownOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {userDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg py-2 z-20 border border-gray-200">
+                  <p
+                    className="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition cursor-pointer"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </p>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Link
+              href="/sign-in"
+              className="flex items-center space-x-3 focus:outline-none  px-2 py-1 rounded-lg transition"
             >
-              <div className="h-9 w-9 rounded-md bg-gray-200 flex items-center justify-center shadow-sm">
+              <div className="h-9 w-9 rounded-md flex items-center justify-center shadow-sm">
                 <User size={18} className="text-gray-700" />
               </div>
-              <div className="hidden md:block text-left">
-                <div className="text-sm font-semibold text-gray-800">
-                  {user?.name ? user.name : "Admin User"}
-                </div>
-              </div>
-              <ChevronDown
-                size={16}
-                className={`text-gray-500 transition-transform duration-200 ${
-                  userDropdownOpen ? "rotate-180" : ""
-                }`}
-              />
-            </button>
-
-            {userDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg py-2 z-20 border border-gray-200">
-                <p
-                  className="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition cursor-pointer"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </p>
-              </div>
-            )}
-          </div>
+            </Link>
+          )}
 
           {/* Mobile Menu Button */}
           <button
@@ -169,7 +180,7 @@ const Navbar = () => {
               <Link href="/shop" className="text-sm hover:text-gray-500">
                 Shop all
               </Link>
-              <Link href="/about" className="text-sm hover:text-gray-500">
+              <Link href="/about-us" className="text-sm hover:text-gray-500">
                 About us
               </Link>
               <Link href="/faqs" className="text-sm hover:text-gray-500">
