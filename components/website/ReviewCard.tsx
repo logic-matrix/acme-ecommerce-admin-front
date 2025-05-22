@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Quote, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import Image from "next/image";
 
 interface ReviewCardProps {
@@ -18,28 +18,31 @@ export default function ReviewCard({
   rating = 5,
 }: ReviewCardProps) {
   return (
-    <Card className="w-[300px] rounded-2xl shadow-sm">
-      <CardContent className="p-6">
+    <Card className=" rounded-4xl border shadow-xl border-gray-200  ">
+      <CardContent className="px-6">
         <div className="flex items-center gap-3 mb-3">
           <Image
             src={image}
             alt={name}
-            width={40}
-            height={40}
+            width={64}
+            height={64}
             className="rounded-full object-cover"
           />
           <div>
-            <h4 className="font-semibold text-sm">{name}</h4>
-            <p className="text-xs text-gray-500">{role}</p>
+            <h4 className="font-semibold text-xl">{name}</h4>
+            <p className="text-base text-gray-500">{role}</p>
           </div>
-          <div className="ml-auto text-gray-400">
-            <span className="text-lg">
-              <Quote />
-            </span>
+          <div className="ml-auto ">
+            <Image
+              src="/website/testimonial-quote.svg"
+              width={38}
+              height={38}
+              alt="testimonial quotation icon"
+            />
           </div>
         </div>
-        <p className="text-sm text-gray-600 mb-4 line-clamp-4">{review}</p>
-        <div className="flex gap-1">
+        <p className="text-[15px] text-gray-700 my-6 line-clamp-4">{review}</p>
+        <div className="flex gap-1 justify-center">
           {[...Array(rating)].map((_, i) => (
             <Star
               key={i}
