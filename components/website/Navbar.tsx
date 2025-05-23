@@ -22,22 +22,24 @@ const Navbar = () => {
             Home
           </Link>
           <div className="relative group">
-            <button className="flex items-center text-sm hover:text-gray-500">
-              Shop all
-              <svg
-                className="w-4 h-4 ml-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </button>
+            <Link href="/shop">
+              <button className="flex items-center text-sm hover:text-gray-500">
+                Shop all
+                <svg
+                  className="w-4 h-4 ml-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+            </Link>
             <div className="absolute z-10 hidden group-hover:block top-full left-0 w-48 bg-white shadow-lg rounded-md py-2">
               <Link
                 href="/category/phones"

@@ -1,5 +1,6 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import productData from "@/data/product.data";
+import { useEffect, useRef } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -7,10 +8,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "../ui/carousel";
-import productData from "@/data/product.data";
 import ProductsCard from "./ProductsCard";
 
-const SliderRecomanded = () => {
+const SliderRecomanded = ({ heading }) => {
   const nextRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const SliderRecomanded = () => {
     <div className="py-10 mx-auto px-4">
       <div>
         <h2 className="font-bold text-3xl md:text-[48px] text-[#292D32]">
-          Explore our recommendations.
+          {heading}
         </h2>
       </div>
       <div className="mt-8">
