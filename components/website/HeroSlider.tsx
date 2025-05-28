@@ -44,8 +44,9 @@ const sliderData = [
 ];
 
 // Autoplay Plugin for Keen-Slider
-const autoplayPlugin = (slider) => {
-  let timeout;
+import type { KeenSliderInstance } from "keen-slider/react";
+const autoplayPlugin = (slider: KeenSliderInstance) => {
+  let timeout: NodeJS.Timeout;
   let mouseOver = false;
 
   function clearNextTimeout() {
@@ -93,7 +94,7 @@ const HeroSlider = () => {
     [autoplayPlugin]
   );
 
-  const handleDotClick = (index) => {
+  const handleDotClick = (index: number) => {
     if (instanceRef.current) {
       instanceRef.current.moveToIdx(index);
     }
