@@ -21,7 +21,7 @@ const Navbar = () => {
           <Link href="/" className="text-sm hover:text-gray-500">
             Home
           </Link>
-          <div className="relative group">
+          <div className="relative group z-50">
             <Link href="/shop">
               <button className="flex items-center text-sm hover:text-gray-500">
                 Shop all
@@ -174,7 +174,7 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div className="z-50 md:hidden absolute top-16 left-0 right-0 bg-white shadow-lg z-20 p-4">
+          <div className="z-50 md:hidden absolute top-16 left-0 right-0 bg-white shadow-lg p-4">
             <div className="flex flex-col space-y-3">
               <Link href="/" className="text-sm hover:text-gray-500">
                 Home

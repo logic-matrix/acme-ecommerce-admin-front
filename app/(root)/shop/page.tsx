@@ -1,6 +1,5 @@
 "use client";
 import BannarSection from "@/components/website/BannarSection";
-import CTA from "@/components/website/CTA";
 import FiltersSidebar from "@/components/website/FiltersSidebar";
 import ProductsCard from "@/components/website/ProductsCard";
 import SearchBar from "@/components/website/SearchBar";
@@ -193,9 +192,7 @@ const ShopPage = () => {
         </div>
       </div>
       <SliderRecomanded heading="Explore our recommendations." />
-      <div className="mb-10">
-        <CTA />
-      </div>
+      <div className="mb-10">{/* <CTA /> */}</div>
       <ShippingBenefits />
       <SubscribeSection />
     </div>

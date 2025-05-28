@@ -21,8 +21,10 @@ const categories: Category[] = [
 ];
 
 // Autoplay Plugin for Keen-Slider
-const autoplay = (slider: number) => {
-  let timeout;
+import type { KeenSliderInstance } from "keen-slider/react";
+
+const autoplay = (slider: KeenSliderInstance) => {
+  let timeout: NodeJS.Timeout;
   let mouseOver = false;
 
   function clearNextTimeout() {
