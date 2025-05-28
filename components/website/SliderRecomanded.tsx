@@ -51,8 +51,10 @@ const SliderRecomanded = ({ heading }) => {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext ref={nextRef} />
+          <div className="hidden lg:block">
+            <CarouselPrevious />
+            <CarouselNext ref={nextRef} />
+          </div>
         </Carousel>
       </div>
     </div>
