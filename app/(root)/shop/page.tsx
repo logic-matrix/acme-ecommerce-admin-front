@@ -7,17 +7,16 @@ import SearchBar from "@/components/website/SearchBar";
 import ShippingBenefits from "@/components/website/ShippingBenefits";
 import SliderRecomanded from "@/components/website/SliderRecomanded";
 import SubscribeSection from "@/components/website/Subscrition";
-import productData from "@/data/product.data";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
 type Product = {
   id: number;
   name: string;
-  category: string;
+  category: string; // Extracted from product.category.name
   price: number;
   available: boolean;
-  rating: number;
+  rating?: number;
   image: string;
 };
 
@@ -28,7 +27,26 @@ type Filters = {
   sortBy?: string;
 };
 
-const products: Product[] = productData;
+type ServerCategory = {
+  id: number;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type ServerProduct = {
+  id: number;
+  name: string;
+  category: ServerCategory;
+  categoryId: number;
+  price: number;
+  status: boolean;
+  stock: number;
+  description: string;
+  images: string[];
+  createdAt: string;
+  updatedAt: string;
+};
 
 const ShopPage = () => {
   const [filters, setFilters] = useState<Filters>({
@@ -41,6 +59,16 @@ const ShopPage = () => {
   const [categories, setCategories] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
+  const [products, setProducts] = useState<Product[]>([]);
+  console.log("products", products);
+  const mapProduct = (product: ServerProduct): Product => ({
+    id: product.id,
+    name: product.name,
+    category: product.category.name,
+    price: product.price,
+    available: product.status,
+    image: product.images[0] || "/website/product.png",
+  });
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -57,8 +85,21 @@ const ShopPage = () => {
         console.error("Failed to fetch categories", error);
       }
     };
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/products`
+        );
+        const mappedProducts: Product[] = res.data.data.map(mapProduct);
+        setProducts(mappedProducts);
+        // console.log(res);
+      } catch (error) {
+        console.error("Failed to fetch products", error);
+      }
+    };
 
     fetchCategories();
+    fetchProducts();
   }, []);
 
   const handleFilterChange = (filter: {
@@ -80,7 +121,8 @@ const ShopPage = () => {
   const filteredProducts = products
     .filter((product) => {
       const matchCategory =
-        filters.category === "All" || product.category === filters.category;
+        filters.category === "All" ||
+        product.category.toLowerCase() === filters.category.toLowerCase();
       const matchAvailability =
         filters.availability === "Available"
           ? product.available === true

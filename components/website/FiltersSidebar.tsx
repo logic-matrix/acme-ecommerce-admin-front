@@ -65,7 +65,9 @@ export default function FiltersSidebar({
                   type="radio"
                   name="category"
                   value={category}
-                  checked={filters.category === category}
+                  checked={
+                    filters.category.toLowerCase() === category.toLowerCase()
+                  }
                   onChange={(e) =>
                     onChange({ type: "category", value: e.target.value })
                   }

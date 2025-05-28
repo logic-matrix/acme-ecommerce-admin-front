@@ -23,7 +23,11 @@ export default function ProductsCard({
   return (
     <div className={`p-4 rounded-lg border shadow-sm w-[322px] ${className}`}>
       <img
-        src={product.image}
+        src={
+          product.image
+            ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/images/${product.image}`
+            : "/website/product.png"
+        }
         alt={product.name}
         className="h-[282px] w-full object-contain bg-black/5"
       />
