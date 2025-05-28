@@ -4,6 +4,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
+import HeadingTitle from "./common/HeadingTitle";
 
 const productData = [
   {
@@ -31,39 +32,35 @@ const productData = [
 
 const CuratedElectronic = () => {
   return (
-    <div className="w-full py-12 bg-white">
+    <div className="w-full py-6 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-10">
-          <h2 className="text-5xl font-bold ">
-            Curated Electronic
-            <br />
-            Ensemble.
-          </h2>
+          {/* Ensure HeadingTitle handles its own responsiveness or is centered */}
+          <HeadingTitle title={"Curated Electronic\nEnsemble"} />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {productData.map((product) => (
-            <Link key={product.id} href={product.link}>
-              <Card className="w-[400px] h-[470px]">
-                <CardContent>
-                  <div className="flex flex-col justify-between">
-                    <div className="p-6">
-                      <h3 className="font-semibold text-2xl mb-2">
-                        {product.title}
-                      </h3>
-                      <p className="text-sm text-[#8B8B8C]">
-                        {product.description}
-                      </p>
-                    </div>
-                    <div className="w-[315px] h-[300px]">
-                      <Image
-                        src={product.image}
-                        alt={product.title}
-                        width={200}
-                        height={300}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+            <Link key={product.id} href={product.link} className="block">
+              <Card className="w-full h-full flex flex-col justify-between overflow-hidden">
+                <CardContent className="p-0 flex flex-col h-full">
+                  {/* Remove default padding and allow flex column */}
+                  <div className="p-6 pb-2">
+                    <h3 className="font-semibold text-xl md:text-2xl mb-2">
+                      {product.title}
+                    </h3>
+                    <p className="text-sm text-[#8B8B8C]">
+                      {product.description}
+                    </p>
+                  </div>
+                  <div className="relative w-full h-[250px] sm:h-[300px] flex-grow mt-4">
+                    <Image
+                      src={product.image}
+                      alt={product.title}
+                      fill // Use fill for better responsiveness with parent container
+                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw" // Optimize image loading
+                      className="object-cover object-center" // Ensure image covers and is centered
+                    />
                   </div>
                 </CardContent>
               </Card>

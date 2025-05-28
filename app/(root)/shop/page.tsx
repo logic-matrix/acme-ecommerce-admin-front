@@ -1,15 +1,15 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import BannarSection from "@/components/website/BannarSection";
+import CTA from "@/components/website/CTA";
 import FiltersSidebar from "@/components/website/FiltersSidebar";
 import ProductsCard from "@/components/website/ProductsCard";
 import SearchBar from "@/components/website/SearchBar";
 import ShippingBenefits from "@/components/website/ShippingBenefits";
+import SliderRecomanded from "@/components/website/SliderRecomanded";
 import SubscribeSection from "@/components/website/Subscrition";
 import productData from "@/data/product.data";
-import SliderRecomanded from "@/components/website/SliderRecomanded";
-import CTA from "@/components/website/CTA";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 type Product = {
   id: number;
@@ -192,7 +192,7 @@ const ShopPage = () => {
           )}
         </div>
       </div>
-      <SliderRecomanded />
+      <SliderRecomanded heading="Explore our recommendations." />
       <div className="mb-10">
         <CTA />
       </div>
