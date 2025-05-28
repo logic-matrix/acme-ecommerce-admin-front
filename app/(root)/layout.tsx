@@ -1,7 +1,13 @@
-// import Navbar from "@/components/Navbar";
 import Footer from "@/components/website/Footer";
 import Navbar from "@/components/website/Navbar";
 import type { Metadata } from "next";
+import { Inter_Tight } from "next/font/google";
+
+// Configuring Inter Tight font
+const interTight = Inter_Tight({
+  subsets: ["latin"],
+  display: "swap", // Recommended for performance
+});
 
 export const metadata: Metadata = {
   title: "ACME-Electronics User Panel",
@@ -15,10 +21,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main>
-      <Navbar></Navbar>
+    <main className={interTight.className}>
+      <Navbar />
       <div>{children}</div>
-      <Footer></Footer>
+      <Footer />
     </main>
   );
 }

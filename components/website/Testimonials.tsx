@@ -5,6 +5,7 @@ import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
 import { useEffect, useRef, useState } from "react";
 import ReviewCard from "./ReviewCard";
+import HeadingTitle from "./common/HeadingTitle";
 // import ReviewCard from "./review-card";
 
 const reviews = [
@@ -77,10 +78,8 @@ export default function Testimonials() {
     };
   }, [instanceRef]);
   return (
-    <section className=" container mx-auto px-10">
-      <h2 className="text-5xl font-semibold leading-tight mb-8">
-        What Our Customers <br /> Are Saying.
-      </h2>
+    <section className=" container mx-auto px-10 py-12">
+      <HeadingTitle title={"What Our Customers \nAre Saying."} />
 
       <div ref={sliderRef} className="keen-slider mb-6">
         {reviews.map((review, index) => (

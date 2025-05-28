@@ -14,7 +14,7 @@ const Navbar = () => {
   const user = useUserStore((state) => state.user);
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto ">
       <nav className="flex items-center justify-between py-4 px-6 md:px-12 bg-white">
         {/* Navigation Links - Desktop */}
         <div className="hidden md:flex items-center space-x-6">
@@ -22,22 +22,24 @@ const Navbar = () => {
             Home
           </Link>
           <div className="relative group">
-            <button className="flex items-center text-sm hover:text-gray-500">
-              Shop all
-              <svg
-                className="w-4 h-4 ml-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </button>
+            <Link href="/shop">
+              <button className="flex items-center text-sm hover:text-gray-500">
+                Shop all
+                <svg
+                  className="w-4 h-4 ml-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+            </Link>
             <div className="absolute z-10 hidden group-hover:block top-full left-0 w-48 bg-white shadow-lg rounded-md py-2">
               <Link
                 href="/category/phones"
@@ -142,7 +144,7 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-1 hover:text-gray-500"
+            className="md:hidden p-1 hover:text-gray-500 "
             onClick={() => setIsOpen(!isOpen)}
           >
             <svg
@@ -172,7 +174,7 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div className="md:hidden absolute top-16 left-0 right-0 bg-white shadow-lg z-20 p-4">
+          <div className="z-50 md:hidden absolute top-16 left-0 right-0 bg-white shadow-lg z-20 p-4">
             <div className="flex flex-col space-y-3">
               <Link href="/" className="text-sm hover:text-gray-500">
                 Home
