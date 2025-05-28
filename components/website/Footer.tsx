@@ -96,7 +96,7 @@ export default function Footer() {
 
         {/* Brand Name */}
         <div className="relative mt-12 mb-8">
-          <h2 className="text-6xl md:text-8xl tracking-widest font-bold text-black/50  text-center">
+          <h2 className="text-4xl md:text-8xl tracking-widest font-[900] text-black/50 text-center">
             ACME ELECTRONICS
           </h2>
         </div>

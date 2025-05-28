@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 // Import shadcn components
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import HeadingTitle from "./common/HeadingTitle";
 
 export default function SpecialOffersCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -35,35 +36,34 @@ export default function SpecialOffersCarousel() {
       promoText: "Members Only - 25% Off",
       buttonText: "View Deal",
     },
+    {
+      productImage: "/website/specialoffer-1.jpg",
+      productName: "Toki Osman",
+      productDescription:
+        "Compact bluetooth speaker delivering room-filling sound",
+      promoBackground: "bg-gradient-to-r from-neutral-800 to-neutral-950",
+      promoText: "Black Friday Sale - 40% Off !",
+      buttonText: "Check Offers",
+    },
   ];
 
   // Auto-scroll functionality
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [slides.length]);
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-  };
-
-  const goToSlide = (index) => {
+  const goToSlide = (index: number): void => {
     setCurrentSlide(index);
   };
 
   return (
-    <div className="container mx-auto px-6 ">
+    <div className="container mx-auto px-6 py-12 ">
       <div className="  space-y-6">
-        <h1 className="text-4xl font-bold text-gray-800">
-          Special Offers Just For You.
-        </h1>
+        <HeadingTitle title="Special Offers Just For You." />
 
         <div className="relative">
           <div className="overflow-hidden rounded-lg">
@@ -73,9 +73,9 @@ export default function SpecialOffersCarousel() {
             >
               {slides.map((slide, index) => (
                 <div key={index} className="min-w-full  flex-shrink-0">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5 ">
+                  <div className="grid grid-cols-1 md:grid-cols-2  gap-5 ">
                     {/* Product Card */}
-                    <Card className="relative w-[600px] h-[600px] overflow-hidden bg-neutral-200  ">
+                    <Card className="relative h-[300px]   md:h-[600px] lg:w-[600px] overflow-hidden bg-neutral-200  ">
                       <CardContent className="p-0">
                         <div className="relative">
                           <img
@@ -97,11 +97,11 @@ export default function SpecialOffersCarousel() {
 
                     {/* Promo Card */}
                     <Card
-                      className={`${slide.promoBackground} w-[600px] h-[600px] overflow-hidden text-white flex flex-col justify-center items-center text-center p-6 border-0`}
+                      className={`${slide.promoBackground} h-[300px]  md:h-[600px] lg:w-[600px] overflow-hidden text-white flex flex-col justify-center items-center text-center p-6 border-0`}
                     >
                       <CardContent className="flex flex-col items-center justify-center space-y-6 p-0 h-full">
                         <div className="space-y-4">
-                          <h2 className="text-3xl md:text-4xl font-bold whitespace-pre-line">
+                          <h2 className="text-xl md:text-4xl font-bold whitespace-pre-line">
                             {slide.promoText}
                           </h2>
                           <Button

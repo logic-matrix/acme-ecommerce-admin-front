@@ -1,5 +1,4 @@
 "use client";
-import AboutUs from "@/components/website/AboutUs";
 import CategoryCards from "@/components/website/CategoryCards";
 import CTA from "@/components/website/CTA";
 import CuratedElectronic from "@/components/website/CuratedElectronic";
@@ -18,7 +17,6 @@ const Home = () => {
   return (
     <div>
       <HeroSlider />
-      <AboutUs />
       <CategoryCards />
       <CuratedElectronic />
       <ShopByCategory />

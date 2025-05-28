@@ -22,9 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <main className={interTight.className}>
-      <Navbar></Navbar>
+      <Navbar />
       <div>{children}</div>
-      <Footer></Footer>
+      <Footer />
     </main>
   );
 }
