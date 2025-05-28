@@ -2,6 +2,8 @@ import BannarSection from "@/components/website/BannarSection";
 import OurClients from "@/components/website/OurClients";
 import OurStory from "@/components/website/OurStory";
 import React from "react";
+import OurValue from "@/components/website/OurValue";
+import OurTeam from "@/components/website/OurTeam";
 
 const AboutUsPage = () => {
   return (
@@ -13,6 +15,8 @@ const AboutUsPage = () => {
       />
       <OurStory />
       <OurClients />
+      <OurValue />
+      <OurTeam />
     </div>
   );
 };
