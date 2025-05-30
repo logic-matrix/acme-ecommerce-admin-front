@@ -113,8 +113,6 @@ const getStatusColor = (status: string) => {
 const Home = () => {
   return (
     <div className="container">
-      {/* Dashboard and date time and filter */}
-      {/* TotalStat */}
       <div className="flex justify-between gap-2 ">
         <TotalStatCard
           total={123334}
